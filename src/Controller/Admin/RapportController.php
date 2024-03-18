@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Rapport;
 use App\Form\RapportType;
@@ -71,7 +71,7 @@ class RapportController extends AbstractController
     #[Route('/{id}', name: 'app_rapport_delete', methods: ['POST'])]
     public function delete(Request $request, Rapport $rapport, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$rapport->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $rapport->getId(), $request->request->get('_token'))) {
             $entityManager->remove($rapport);
             $entityManager->flush();
         }

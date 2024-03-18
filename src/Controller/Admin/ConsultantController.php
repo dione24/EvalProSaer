@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Consultant;
-use App\Form\Consultant1Type;
+use App\Form\ConsultantType;
 use App\Repository\ConsultantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +26,7 @@ class ConsultantController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $consultant = new Consultant();
-        $form = $this->createForm(Consultant1Type::class, $consultant);
+        $form = $this->createForm(ConsultantType::class, $consultant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +53,7 @@ class ConsultantController extends AbstractController
     #[Route('/{id}/edit', name: 'app_consultant_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Consultant $consultant, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(Consultant1Type::class, $consultant);
+        $form = $this->createForm(ConsultantType::class, $consultant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -71,7 +71,7 @@ class ConsultantController extends AbstractController
     #[Route('/{id}', name: 'app_consultant_delete', methods: ['POST'])]
     public function delete(Request $request, Consultant $consultant, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$consultant->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $consultant->getId(), $request->request->get('_token'))) {
             $entityManager->remove($consultant);
             $entityManager->flush();
         }

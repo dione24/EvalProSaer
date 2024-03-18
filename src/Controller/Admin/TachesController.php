@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Taches;
-use App\Form\Taches1Type;
+use App\Form\TachesType;
 use App\Repository\TachesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +26,7 @@ class TachesController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $tach = new Taches();
-        $form = $this->createForm(Taches1Type::class, $tach);
+        $form = $this->createForm(TachesType::class, $tach);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +53,7 @@ class TachesController extends AbstractController
     #[Route('/{id}/edit', name: 'app_taches_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Taches $tach, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(Taches1Type::class, $tach);
+        $form = $this->createForm(TachesType::class, $tach);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -71,7 +71,7 @@ class TachesController extends AbstractController
     #[Route('/{id}', name: 'app_taches_delete', methods: ['POST'])]
     public function delete(Request $request, Taches $tach, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tach->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $tach->getId(), $request->request->get('_token'))) {
             $entityManager->remove($tach);
             $entityManager->flush();
         }
