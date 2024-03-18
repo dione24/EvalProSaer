@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<title>Rapport</title>
+
+{% block body %}
+    <h1>Rapport</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ rapport.id }}</td>
+            </tr>
+            <tr>
+                <th>Periode</th>
+                <td>{{ rapport.periode ? rapport.periode|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Realisations</th>
+                <td>{{ rapport.realisations }}</td>
+            </tr>
+            <tr>
+                <th>Difficultes</th>
+                <td>{{ rapport.difficultes }}</td>
+            </tr>
+            <tr>
+                <th>Propositions_innovation</th>
+                <td>{{ rapport.propositionsInnovation }}</td>
+            </tr>
+            <tr>
+                <th>Auto_evaluation</th>
+                <td>{{ rapport.autoEvaluation }}</td>
+            </tr>
+            <tr>
+                <th>Evaluation_responsable</th>
+                <td>{{ rapport.evaluationResponsable }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rapport_index') }}">back to list</a>
+
+    <a href="{{ path('app_rapport_edit', {'id': rapport.id}) }}">edit</a>
+
+    {{ include('rapport/_delete_form.html.twig') }}
+{% endblock %}

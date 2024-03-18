@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<title>Consultant index</title>
+
+{% block body %}
+    <h1>Consultant index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Competences</th>
+                <th>Disponibilite</th>
+                <th>Cv</th>
+                <th>Description_profil</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for consultant in consultants %}
+            <tr>
+                <td>{{ consultant.id }}</td>
+                <td>{{ consultant.competences }}</td>
+                <td>{{ consultant.disponibilite ? consultant.disponibilite|date('Y-m-d') : '' }}</td>
+                <td>{{ consultant.cv }}</td>
+                <td>{{ consultant.descriptionProfil }}</td>
+                <td>
+                    <a href="{{ path('app_consultant_show', {'id': consultant.id}) }}">show</a>
+                    <a href="{{ path('app_consultant_edit', {'id': consultant.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_consultant_new') }}">Create new</a>
+{% endblock %}

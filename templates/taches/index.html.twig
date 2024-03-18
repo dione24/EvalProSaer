@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<title>Taches index</title>
+
+{% block body %}
+    <h1>Taches index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Dependance</th>
+                <th>Priorite</th>
+                <th>Estimation_temps</th>
+                <th>Statut</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tach in taches %}
+            <tr>
+                <td>{{ tach.id }}</td>
+                <td>{{ tach.description }}</td>
+                <td>{{ tach.dependance }}</td>
+                <td>{{ tach.priorite }}</td>
+                <td>{{ tach.estimationTemps }}</td>
+                <td>{{ tach.statut }}</td>
+                <td>
+                    <a href="{{ path('app_taches_show', {'id': tach.id}) }}">show</a>
+                    <a href="{{ path('app_taches_edit', {'id': tach.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_taches_new') }}">Create new</a>
+{% endblock %}

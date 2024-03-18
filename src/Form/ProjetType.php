@@ -22,8 +22,7 @@ class ProjetType extends AbstractType
             ->add('date_fin', null, [
                 'widget' => 'single_text',
             ])
-            ->add('statut')
-        ;
+            ->add('statut');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

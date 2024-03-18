@@ -28,8 +28,7 @@ class TachesType extends AbstractType
                 'class' => Consultant::class,
                 'choice_label' => 'id',
                 'multiple' => true,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
