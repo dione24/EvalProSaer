@@ -1,18 +1,302 @@
-{% extends "layouts/app.html.twig" %} 
+{% extends "layouts/app.html.twig" %}
 {% block body %}
-  <div class="row">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Starter Page</h4>
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+				<h4 class="mb-sm-0 font-size-18">Dashboard</h4>
 
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Utility</a></li>
-                        <li class="breadcrumb-item active">Starter Page</li>
-                    </ol>
-                </div>
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item">
+							<a href="javascript: void(0);">Dashboard</a>
+						</li>
+						<li class="breadcrumb-item active">Index</li>
+					</ol>
+				</div>
 
-            </div>
-        </div>
-    </div>
-{% endblock %}
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-xl-4">
+			<div class="card overflow-hidden">
+				<div class="bg-primary bg-soft">
+					<div class="row">
+						<div class="col-7">
+							<div class="text-primary p-3">
+								<h5 class="text-primary">Bienvenue
+									{{ app.user.username }}</h5>
+								<p>
+									Espace de travail
+								</p>
+							</div>
+						</div>
+						<div class="col-5 align-self-end">
+							<img src="assets/images/profile-img.png" alt="" class="img-fluid">
+						</div>
+					</div>
+				</div>
+				<div class="card-body pt-0">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="avatar-md profile-user-wid mb-4">
+								<img src="assets/images/users/avatar-1.jpg" alt="" class="img-thumbnail rounded-circle">
+							</div>
+							<h5 class="font-size-15 text-truncate">
+								{{ app.user.nom }}
+							</h5>
+							<p class="text-muted mb-0 text-truncate">
+								{{ app.user.roles[0] }}
+							</p>
+						</div>
+
+						<div class="col-sm-8">
+							<div class="pt-4">
+
+								<div class="row">
+									<div class="col-6">
+										<h5 class="font-size-15">
+											{{ projets|length }}
+										</h5>
+										<p class="text-muted mb-0">Projets</p>
+									</div>
+									<div class="col-6">
+										<h5 class="font-size-15">
+											{% set totalTaches = 0 %}
+											{% for projet in projets %}
+												{% set totalTaches = totalTaches + projet.taches|length %}
+											{% endfor %}
+											{{ totalTaches }}
+										</h5>
+										<p class="text-muted mb-0">
+											Taches</p>
+									</p>
+								</div>
+							</div>
+							<div class="mt-4">
+								<a href="{{ path('app_projet_index') }}" class="btn btn-primary waves-effect waves-light btn-sm">Mes Projets
+									<i class="mdi mdi-arrow-right ms-1"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-xl-8">
+		<div class="row">
+
+
+			<div class="col-md-4">
+				<div class="card mini-stats-wid">
+					<div class="card-body">
+						<div class="d-flex">
+							<div class="flex-grow-1">
+								<p class="text-muted fw-medium">
+
+									En attente
+
+								</p>
+								<h4 class="mb-0">
+									{% set enAttente = 0 %}
+									{% for projet in projets %}
+										{% if projet.statut.id == 3 %}
+											{% set enAttente = enAttente + 1 %}
+										{% endif %}
+									{% endfor %}
+									{{ enAttente }}
+
+
+								</h4>
+							</div>
+
+							<div class="flex-shrink-0 align-self-center">
+								<div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+									<span class="avatar-title rounded-circle bg-primary">
+										<i class="bx bx-purchase-tag-alt font-size-24"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<div class="card mini-stats-wid">
+					<div class="card-body">
+						<div class="d-flex">
+							<div class="flex-grow-1">
+								<p class="text-muted fw-medium">
+									En cours
+								</p>
+								<h4 class="mb-0">
+									{% set enCours = 0 %}
+									{% for projet in projets %}
+										{% if projet.statut.nom == 'En cours' %}
+											{% set enCours = enCours + 1 %}
+										{% endif %}
+									{% endfor %}
+									{{ enCours }}
+
+								</h4>
+							</div>
+
+							<div class="flex-shrink-0 align-self-center">
+								<div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
+									<span class="avatar-title">
+										<i class="bx bx-copy-alt font-size-24"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card mini-stats-wid">
+					<div class="card-body">
+						<div class="d-flex">
+							<div class="flex-grow-1">
+								<p class="text-muted fw-medium">
+									Terminés
+
+								</p>
+								<h4 class="mb-0">
+									{% set termines = 0 %}
+									{% for projet in projets %}
+										{% if projet.statut.id == 2 %}
+											{% set termines = termines + 1 %}
+										{% endif %}
+									{% endfor %}
+									{{ termines }}
+
+								</h4>
+							</div>
+
+							<div class="flex-shrink-0 align-self-center ">
+								<div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+									<span class="avatar-title rounded-circle bg-primary">
+										<i class="bx bx-archive-in font-size-24"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- end row -->
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title mb-4">
+					Mes taches en cours
+				</h4>
+				<div class="table-responsive">
+					<table class="table table-nowrap align-middle mb-0">
+						<tbody>
+							{% for tache in taches %}
+								<tr>
+									<td style="width: 40px;">
+										<div class="form-check font-size-16">
+											<input class="form-check-input" type="checkbox" id="upcomingtaskCheck01">
+											<label class="form-check-label" for="upcomingtaskCheck01"></label>
+										</div>
+									</td>
+									<td>
+										<h5 class="text-truncate font-size-14 m-0">
+											<a href="javascript: void(0);" class="text-dark">{{ tache.nom }}
+
+
+											</a>
+										</h5>
+									</td>
+									<td>
+										<div class="avatar-group">
+											<div class="avatar-group-item">
+												<a href="javascript: void(0);" class="d-inline-block">
+													<img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle avatar-xs">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a href="javascript: void(0);" class="d-inline-block">
+													<img src="assets/images/users/avatar-5.jpg" alt="" class="rounded-circle avatar-xs">
+												</a>
+											</div>
+										</div>
+									</td>
+									<td>
+										<div class="text-center">
+											<span class="badge rounded-pill badge-soft-secondary font-size-11">Waiting</span>
+										</div>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div></div><div class="row">
+{% for projet in projets %}
+
+
+	<div class="col-xl-4 col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<div class="d-flex">
+					<div class="flex-shrink-0 me-4">
+						<div class="avatar-md">
+							<span class="avatar-title rounded-circle bg-light text-danger font-size-16">
+								<img src="assets/images/companies/img-1.png" alt="" height="30">
+							</span>
+						</div>
+					</div>
+					<div class="flex-grow-1 overflow-hidden">
+						<h5 class="text-truncate font-size-15">
+							<a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="text-dark">
+								<p class="text-dark mb-1">
+									{{ projet.nom }}
+								</p>
+							</a>
+						</h5>
+						<p class="text-muted mb-4">
+							{{ projet.description }}
+						</p>
+						<div class="avatar-group">
+							<div class="avatar-group-item">
+								<a href="javascript: void(0);" class="d-inline-block">
+									<img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle avatar-xs">
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="px-4 py-3 border-top">
+				<ul class="list-inline mb-0">
+					<li class="list-inline-item me-3">
+						<span class="badge bg-success">
+							{{ projet.statut.nom }}
+						</span>
+					</li>
+					<li class="list-inline-item me-3">
+						<i class="bx bx-calendar me-1"></i>
+						{{ projet.dateDebut|date('d/m/Y') }}
+					</li>
+					<li class="list-inline-item me-3">
+						<i class="bx bx-comment-dots me-1"></i>
+						{{ projet.commentaires|length }}
+						Commentaires
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endfor %}</div>{% endblock %}

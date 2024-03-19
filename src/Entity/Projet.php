@@ -46,10 +46,14 @@ class Projet
     #[ORM\OneToMany(targetEntity: Taches::class, mappedBy: 'projet')]
     private Collection $taches;
 
+    #[ORM\OneToMany(targetEntity: Commentaires::class, mappedBy: 'content')]
+    private Collection $commentaires;
+
     public function __construct()
     {
         $this->rapports = new ArrayCollection();
         $this->taches = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,6 +200,36 @@ class Projet
             // set the owning side to null (unless already changed)
             if ($tach->getProjet() === $this) {
                 $tach->setProjet(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaires>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaires $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setContent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaires $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getContent() === $this) {
+                $commentaire->setContent(null);
             }
         }
 
