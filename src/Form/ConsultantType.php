@@ -28,13 +28,15 @@ class ConsultantType extends AbstractType
                 'label' => 'CV (PDF file)',
                 'mapped' => false,
                 'required' => false,
-
             ])
             ->add('description_profil', TextareaType::class, [
                 'attr' => ['class' => 'tinymce'],
+            ])
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'username',
             ]);
     }
-
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

@@ -18,6 +18,7 @@ class ConsultantController extends AbstractController
     #[Route('/', name: 'app_consultant_index', methods: ['GET'])]
     public function index(ConsultantRepository $consultantRepository): Response
     {
+
         return $this->render('Admin/consultant/index.html.twig', [
             'consultants' => $consultantRepository->findAll(),
         ]);

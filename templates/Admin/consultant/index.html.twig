@@ -43,6 +43,8 @@
 						<thead>
 							<tr>
 								<th>Id</th>
+								<th>Nom</th>
+								<th>Prenom</th>
 								<th>Competences</th>
 								<th>Disponibilite</th>
 								<th>Cv</th>
@@ -54,7 +56,10 @@
 						<tbody>
 							{% for consultant in consultants %}
 								<tr>
+
 									<td>{{ consultant.id }}</td>
+									<td>{{ consultant.user.nom ?? '' }}</td>
+									<td>{{ consultant.user.prenom ?? '' }}</td>
 									<td>{{ consultant.competences }}</td>
 									<td>{{ consultant.disponibilite ? consultant.disponibilite|date('Y-m-d') : '' }}</td>
 									<td>{{ consultant.cv }}</td>
