@@ -1,11 +1,52 @@
-<!DOCTYPE html>
+{% extends 'layouts/app.html.twig' %}
 
-<title>New Projet</title>
+{% block title %}New Project
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Projet</h1>
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+				<h4 class="mb-sm-0 font-size-18">
+					Ajouter un Projet
+				</h4>
 
-    {{ include('projet/_form.html.twig') }}
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item">
+							<a href="{{ path('app_admin_dashboard') }}">
+								Accueil
+							</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="{{ path('app_projet_index') }}">
+								Projets
+							</a>
+						</li>
+						<li class="breadcrumb-item active">
+							Ajouter
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				{{ form_start(form) }}
+				<div class="mb-3 row">
+					{{ form_widget(form) }}
+				</div>
+				<button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+				{{ form_end(form) }}
+			</div>
 
-    <a href="{{ path('app_projet_index') }}">back to list</a>
+			<div class="card-footer">
+				<a href="{{ path('app_projet_index') }}" class="btn btn-secondary">
+					Retour à la liste
+				</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}

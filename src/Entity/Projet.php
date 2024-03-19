@@ -34,19 +34,22 @@ class Projet
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $date_fin = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $statut = null;
 
-    #[ORM\OneToMany(targetEntity: Taches::class, mappedBy: 'projet_id')]
-    private Collection $taches;
+
 
     #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'projet_id')]
     private Collection $rapports;
 
+    #[ORM\ManyToOne(inversedBy: 'projets')]
+    private ?Statut $statut = null;
+
+    #[ORM\OneToMany(targetEntity: Taches::class, mappedBy: 'projet')]
+    private Collection $taches;
+
     public function __construct()
     {
-        $this->taches = new ArrayCollection();
         $this->rapports = new ArrayCollection();
+        $this->taches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,47 +129,6 @@ class Projet
         return $this;
     }
 
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(string $statut): static
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Taches>
-     */
-    public function getTaches(): Collection
-    {
-        return $this->taches;
-    }
-
-    public function addTach(Taches $tach): static
-    {
-        if (!$this->taches->contains($tach)) {
-            $this->taches->add($tach);
-            $tach->setProjetId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTach(Taches $tach): static
-    {
-        if ($this->taches->removeElement($tach)) {
-            // set the owning side to null (unless already changed)
-            if ($tach->getProjetId() === $this) {
-                $tach->setProjetId(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Rapport>
@@ -192,6 +154,48 @@ class Projet
             // set the owning side to null (unless already changed)
             if ($rapport->getProjetId() === $this) {
                 $rapport->setProjetId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStatut(): ?Statut
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?Statut $statut): static
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Taches>
+     */
+    public function getTaches(): Collection
+    {
+        return $this->taches;
+    }
+
+    public function addTach(Taches $tach): static
+    {
+        if (!$this->taches->contains($tach)) {
+            $this->taches->add($tach);
+            $tach->setProjet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTach(Taches $tach): static
+    {
+        if ($this->taches->removeElement($tach)) {
+            // set the owning side to null (unless already changed)
+            if ($tach->getProjet() === $this) {
+                $tach->setProjet(null);
             }
         }
 

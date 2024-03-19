@@ -34,9 +34,13 @@ class Consultant
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'consultant')]
+    private Collection $rapport;
+
     public function __construct()
     {
         $this->taches = new ArrayCollection();
+        $this->rapport = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +132,36 @@ class Consultant
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rapport>
+     */
+    public function getRapport(): Collection
+    {
+        return $this->rapport;
+    }
+
+    public function addRapport(Rapport $rapport): static
+    {
+        if (!$this->rapport->contains($rapport)) {
+            $this->rapport->add($rapport);
+            $rapport->setConsultant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRapport(Rapport $rapport): static
+    {
+        if ($this->rapport->removeElement($rapport)) {
+            // set the owning side to null (unless already changed)
+            if ($rapport->getConsultant() === $this) {
+                $rapport->setConsultant(null);
+            }
+        }
 
         return $this;
     }

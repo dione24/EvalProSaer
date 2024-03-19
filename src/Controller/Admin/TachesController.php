@@ -6,19 +6,36 @@ use App\Entity\Taches;
 use App\Form\TachesType;
 use App\Repository\TachesRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/taches')]
 class TachesController extends AbstractController
 {
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/', name: 'app_taches_index', methods: ['GET'])]
     public function index(TachesRepository $tachesRepository): Response
     {
-        return $this->render('taches/index.html.twig', [
-            'taches' => $tachesRepository->findAll(),
+        // Vérifiez si l'utilisateur est administrateur ou manager
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_MANAGER')) {
+            // Si oui, récupérez toutes les tâches
+            $taches = $tachesRepository->findAll();
+        } else {
+            // Sinon, récupérez les tâches associées à l'utilisateur actuel
+            $taches = $tachesRepository->findTachesByUser($this->getUser());
+        }
+        return $this->render('Admin/taches/index.html.twig', [
+            'taches' => $taches,
         ]);
     }
 
@@ -35,8 +52,7 @@ class TachesController extends AbstractController
 
             return $this->redirectToRoute('app_taches_index', [], Response::HTTP_SEE_OTHER);
         }
-
-        return $this->render('taches/new.html.twig', [
+        return $this->render('Admin/taches/new.html.twig', [
             'tach' => $tach,
             'form' => $form,
         ]);
@@ -45,7 +61,7 @@ class TachesController extends AbstractController
     #[Route('/{id}', name: 'app_taches_show', methods: ['GET'])]
     public function show(Taches $tach): Response
     {
-        return $this->render('taches/show.html.twig', [
+        return $this->render('Admin/taches/show.html.twig', [
             'tach' => $tach,
         ]);
     }
@@ -62,7 +78,7 @@ class TachesController extends AbstractController
             return $this->redirectToRoute('app_taches_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('taches/edit.html.twig', [
+        return $this->render('Admin/taches/edit.html.twig', [
             'tach' => $tach,
             'form' => $form,
         ]);

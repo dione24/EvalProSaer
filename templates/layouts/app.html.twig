@@ -247,15 +247,16 @@
 									</span>
 								</a>
 							</li>
-
-							<li>
-								<a href="{{ path('app_consultant_index') }}" class="waves-effect">
-									<i class="bx bx-layout"></i>
-									<span key="t-horizontal">
-										Consultants
-									</span>
-								</a>
-							</li>
+							{% if is_granted('ROLE_MANAGER') or is_granted('ROLE_ADMIN') %}
+								<li>
+									<a href="{{ path('app_consultant_index') }}" class="waves-effect">
+										<i class="bx bx-layout"></i>
+										<span key="t-horizontal">
+											Consultants
+										</span>
+									</a>
+								</li>
+							{% endif %}
 
 							<li>
 								<a href="{{ path('app_projet_index') }}" class="waves-effect">
@@ -354,8 +355,7 @@
 		<script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
 		<script src="{{asset('assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}"></script>
 
-		<script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
-
+		<script src="assets/js/pages/datatables.init.js"></script>
 
 		<script src="{{asset('assets/js/app.js')}}"></script>
 

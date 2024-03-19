@@ -19,8 +19,10 @@ class Rapport
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $periode = null;
 
-    #[ORM\ManyToMany(targetEntity: Consultant::class, inversedBy: 'projet_id')]
-    private Collection $consultant_id;
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Consultant", mappedBy="rapports")
+     */
+    private $consultants;
 
     #[ORM\ManyToOne(inversedBy: 'rapports')]
     private ?Projet $projet_id = null;
@@ -37,12 +39,18 @@ class Rapport
     #[ORM\Column(type: Types::TEXT)]
     private ?string $auto_evaluation = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)] // Permettre les valeurs NULL
     private ?string $evaluation_responsable = null;
+
+    #[ORM\ManyToOne(inversedBy: 'rapport')]
+    private ?Consultant $consultant = null;
+
+    #[ORM\ManyToOne(inversedBy: 'rapports')]
+    private ?Taches $tache = null;
 
     public function __construct()
     {
-        $this->consultant_id = new ArrayCollection();
+        $this->consultants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,7 +63,7 @@ class Rapport
         return $this->periode;
     }
 
-    public function setPeriode(\DateTimeImmutable $periode): static
+    public function setPeriode(\DateTimeImmutable $periode): self
     {
         $this->periode = $periode;
 
@@ -63,25 +71,27 @@ class Rapport
     }
 
     /**
-     * @return Collection<int, Consultant>
+     * @return Collection|Consultant[]
      */
-    public function getConsultantId(): Collection
+    public function getConsultants()
     {
-        return $this->consultant_id;
+        return $this->consultants;
     }
 
-    public function addConsultantId(Consultant $consultantId): static
+    public function addConsultant(Consultant $consultant): self
     {
-        if (!$this->consultant_id->contains($consultantId)) {
-            $this->consultant_id->add($consultantId);
+        if (!$this->consultants->contains($consultant)) {
+            $this->consultants[] = $consultant;
+            $consultant->addRapport($this);
         }
 
         return $this;
     }
 
-    public function removeConsultantId(Consultant $consultantId): static
+    public function removeConsultant(Consultant $consultant): self
     {
-        $this->consultant_id->removeElement($consultantId);
+        $this->consultants->removeElement($consultant);
+        $consultant->removeRapport($this);
 
         return $this;
     }
@@ -91,7 +101,7 @@ class Rapport
         return $this->projet_id;
     }
 
-    public function setProjetId(?Projet $projet_id): static
+    public function setProjetId(?Projet $projet_id): self
     {
         $this->projet_id = $projet_id;
 
@@ -103,7 +113,7 @@ class Rapport
         return $this->realisations;
     }
 
-    public function setRealisations(string $realisations): static
+    public function setRealisations(string $realisations): self
     {
         $this->realisations = $realisations;
 
@@ -115,7 +125,7 @@ class Rapport
         return $this->difficultes;
     }
 
-    public function setDifficultes(string $difficultes): static
+    public function setDifficultes(string $difficultes): self
     {
         $this->difficultes = $difficultes;
 
@@ -127,7 +137,7 @@ class Rapport
         return $this->propositions_innovation;
     }
 
-    public function setPropositionsInnovation(string $propositions_innovation): static
+    public function setPropositionsInnovation(string $propositions_innovation): self
     {
         $this->propositions_innovation = $propositions_innovation;
 
@@ -139,7 +149,7 @@ class Rapport
         return $this->auto_evaluation;
     }
 
-    public function setAutoEvaluation(string $auto_evaluation): static
+    public function setAutoEvaluation(string $auto_evaluation): self
     {
         $this->auto_evaluation = $auto_evaluation;
 
@@ -151,9 +161,33 @@ class Rapport
         return $this->evaluation_responsable;
     }
 
-    public function setEvaluationResponsable(string $evaluation_responsable): static
+    public function setEvaluationResponsable(?string $evaluation_responsable): self
     {
         $this->evaluation_responsable = $evaluation_responsable;
+
+        return $this;
+    }
+
+    public function getConsultant(): ?Consultant
+    {
+        return $this->consultant;
+    }
+
+    public function setConsultant(?Consultant $consultant): self
+    {
+        $this->consultant = $consultant;
+
+        return $this;
+    }
+
+    public function getTache(): ?Taches
+    {
+        return $this->tache;
+    }
+
+    public function setTache(?Taches $tache): self
+    {
+        $this->tache = $tache;
 
         return $this;
     }

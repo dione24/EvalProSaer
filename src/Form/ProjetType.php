@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Projet;
+use App\Entity\Statut;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProjetType extends AbstractType
@@ -22,7 +24,10 @@ class ProjetType extends AbstractType
             ->add('date_fin', null, [
                 'widget' => 'single_text',
             ])
-            ->add('statut');
+            ->add('statut', EntityType::class, [
+                'class' => Statut::class,
+                'choice_label' => 'nom',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -6,19 +6,36 @@ use App\Entity\Rapport;
 use App\Form\RapportType;
 use App\Repository\RapportRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/rapport')]
 class RapportController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/', name: 'app_rapport_index', methods: ['GET'])]
     public function index(RapportRepository $rapportRepository): Response
     {
-        return $this->render('rapport/index.html.twig', [
-            'rapports' => $rapportRepository->findAll(),
+        // Vérifiez si l'utilisateur est administrateur ou manager
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_MANAGER')) {
+            // Si oui, récupérez tous les rapports
+            $rapports = $rapportRepository->findAll();
+        } else {
+            // Sinon, récupérez les rapports associés à l'utilisateur actuel
+            $rapports = $rapportRepository->findRapportByUser($this->getUser());
+        }
+
+        return $this->render('Admin/rapport/index.html.twig', [
+            'rapports' => $rapports,
         ]);
     }
 
@@ -36,7 +53,7 @@ class RapportController extends AbstractController
             return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('rapport/new.html.twig', [
+        return $this->render('Admin/rapport/new.html.twig', [
             'rapport' => $rapport,
             'form' => $form,
         ]);
@@ -45,7 +62,7 @@ class RapportController extends AbstractController
     #[Route('/{id}', name: 'app_rapport_show', methods: ['GET'])]
     public function show(Rapport $rapport): Response
     {
-        return $this->render('rapport/show.html.twig', [
+        return $this->render('Admin/rapport/show.html.twig', [
             'rapport' => $rapport,
         ]);
     }
@@ -62,7 +79,7 @@ class RapportController extends AbstractController
             return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('rapport/edit.html.twig', [
+        return $this->render('Admin/rapport/edit.html.twig', [
             'rapport' => $rapport,
             'form' => $form,
         ]);

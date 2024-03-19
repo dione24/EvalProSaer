@@ -45,4 +45,14 @@ class RapportRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findRapportByUser($user): array
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.consultant', 'c')
+            ->andWhere('c.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 }

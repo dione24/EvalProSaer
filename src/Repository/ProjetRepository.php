@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Projet;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Projet>
@@ -45,4 +46,15 @@ class ProjetRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findProjetByUser(User $user): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('p.taches', 't') // Joindre les tâches du projet
+            ->innerJoin('t.consultant_id', 'c') // Joindre les consultants de la tâche
+            ->where('c.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery();
+        return $qb->getResult();
+    }
 }

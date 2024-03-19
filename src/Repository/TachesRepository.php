@@ -45,4 +45,14 @@ class TachesRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findTachesByUser($user): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->innerJoin('t.consultant_id', 'c') // Joindre les consultants de la tâche
+            ->where('c.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery();
+        return $qb->getResult();
+    }
 }

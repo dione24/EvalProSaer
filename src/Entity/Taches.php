@@ -16,14 +16,10 @@ class Taches
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'taches')]
-    private ?Projet $projet_id = null;
+
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $dependance = null;
 
     #[ORM\Column(length: 255)]
     private ?string $priorite = null;
@@ -34,12 +30,16 @@ class Taches
     #[ORM\ManyToMany(targetEntity: Consultant::class, inversedBy: 'taches')]
     private Collection $consultant_id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $statut = null;
+    #[ORM\ManyToOne(inversedBy: 'taches')]
+    private ?Projet $projet = null;
+
+    #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'tache')]
+    private Collection $rapports;
 
     public function __construct()
     {
         $this->consultant_id = new ArrayCollection();
+        $this->rapports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -47,17 +47,7 @@ class Taches
         return $this->id;
     }
 
-    public function getProjetId(): ?Projet
-    {
-        return $this->projet_id;
-    }
 
-    public function setProjetId(?Projet $projet_id): static
-    {
-        $this->projet_id = $projet_id;
-
-        return $this;
-    }
 
     public function getDescription(): ?string
     {
@@ -67,18 +57,6 @@ class Taches
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getDependance(): ?string
-    {
-        return $this->dependance;
-    }
-
-    public function setDependance(?string $dependance): static
-    {
-        $this->dependance = $dependance;
 
         return $this;
     }
@@ -131,14 +109,44 @@ class Taches
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getProjet(): ?Projet
     {
-        return $this->statut;
+        return $this->projet;
     }
 
-    public function setStatut(string $statut): static
+    public function setProjet(?Projet $projet): static
     {
-        $this->statut = $statut;
+        $this->projet = $projet;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rapport>
+     */
+    public function getRapports(): Collection
+    {
+        return $this->rapports;
+    }
+
+    public function addRapport(Rapport $rapport): static
+    {
+        if (!$this->rapports->contains($rapport)) {
+            $this->rapports->add($rapport);
+            $rapport->setTache($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRapport(Rapport $rapport): static
+    {
+        if ($this->rapports->removeElement($rapport)) {
+            // set the owning side to null (unless already changed)
+            if ($rapport->getTache() === $this) {
+                $rapport->setTache(null);
+            }
+        }
 
         return $this;
     }

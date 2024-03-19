@@ -6,19 +6,36 @@ use App\Entity\Projet;
 use App\Form\ProjetType;
 use App\Repository\ProjetRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/projet')]
 class ProjetController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/', name: 'app_projet_index', methods: ['GET'])]
     public function index(ProjetRepository $projetRepository): Response
     {
-        return $this->render('projet/index.html.twig', [
-            'projets' => $projetRepository->findAll(),
+        // Vérifiez si l'utilisateur est administrateur ou manager
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_MANAGER')) {
+            // Si oui, récupérez tous les projets
+            $projets = $projetRepository->findAll();
+        } else {
+            // Sinon, récupérez les projets associés à l'utilisateur actuel
+            $projets = $projetRepository->findProjetByUser($this->getUser());
+        }
+
+        return $this->render('Admin/projet/index.html.twig', [
+            'projets' => $projets,
         ]);
     }
 
@@ -36,7 +53,7 @@ class ProjetController extends AbstractController
             return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('projet/new.html.twig', [
+        return $this->render('Admin/projet/new.html.twig', [
             'projet' => $projet,
             'form' => $form,
         ]);
@@ -45,7 +62,7 @@ class ProjetController extends AbstractController
     #[Route('/{id}', name: 'app_projet_show', methods: ['GET'])]
     public function show(Projet $projet): Response
     {
-        return $this->render('projet/show.html.twig', [
+        return $this->render('Admin/projet/show.html.twig', [
             'projet' => $projet,
         ]);
     }
@@ -62,7 +79,7 @@ class ProjetController extends AbstractController
             return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('projet/edit.html.twig', [
+        return $this->render('Admin/projet/edit.html.twig', [
             'projet' => $projet,
             'form' => $form,
         ]);

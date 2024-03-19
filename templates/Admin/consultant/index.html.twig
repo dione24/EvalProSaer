@@ -32,11 +32,12 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-
-					<a href="{{ path('app_consultant_new') }}" class="btn btn-primary waves-effect waves-light mb-3">
-						<i class="mdi mdi-plus me-2"></i>
-						Ajouter Consultant
-					</a>
+					{% if is_granted('ROLE_MANAGER') or is_granted('ROLE_ADMIN') %}
+						<a href="{{ path('app_consultant_new') }}" class="btn btn-primary waves-effect waves-light mb-3">
+							<i class="mdi mdi-plus me-2"></i>
+							Ajouter Consultant
+						</a>
+					{% endif %}
 
 					<table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
 
@@ -66,6 +67,7 @@
 									<td>{{ consultant.descriptionProfil }}</td>
 									<td>
 										<div class="d-flex">
+
 											<a href="{{ path('app_consultant_show', {'id': consultant.id}) }}" class="btn btn-primary waves-effect waves-light me-2">
 												<i class="mdi mdi-eye"></i>
 											</a>
