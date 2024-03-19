@@ -25,7 +25,7 @@ class Rapport
     private $consultants;
 
     #[ORM\ManyToOne(inversedBy: 'rapports')]
-    private ?Projet $projet_id = null;
+    private ?Projet $projet = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $realisations = null;
@@ -39,18 +39,19 @@ class Rapport
     #[ORM\Column(type: Types::TEXT)]
     private ?string $auto_evaluation = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)] // Permettre les valeurs NULL
-    private ?string $evaluation_responsable = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'rapport')]
     private ?Consultant $consultant = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rapports')]
-    private ?Taches $tache = null;
+
+    #[ORM\OneToMany(targetEntity: Evaluation::class, mappedBy: 'rapport')]
+    private Collection $evaluations;
 
     public function __construct()
     {
         $this->consultants = new ArrayCollection();
+        $this->evaluations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,12 +99,12 @@ class Rapport
 
     public function getProjetId(): ?Projet
     {
-        return $this->projet_id;
+        return $this->projet;
     }
 
-    public function setProjetId(?Projet $projet_id): self
+    public function setProjetId(?Projet $projet): self
     {
-        $this->projet_id = $projet_id;
+        $this->projet = $projet;
 
         return $this;
     }
@@ -156,17 +157,6 @@ class Rapport
         return $this;
     }
 
-    public function getEvaluationResponsable(): ?string
-    {
-        return $this->evaluation_responsable;
-    }
-
-    public function setEvaluationResponsable(?string $evaluation_responsable): self
-    {
-        $this->evaluation_responsable = $evaluation_responsable;
-
-        return $this;
-    }
 
     public function getConsultant(): ?Consultant
     {
@@ -180,14 +170,33 @@ class Rapport
         return $this;
     }
 
-    public function getTache(): ?Taches
+
+    /**
+     * @return Collection<int, Evaluation>
+     */
+    public function getEvaluations(): Collection
     {
-        return $this->tache;
+        return $this->evaluations;
     }
 
-    public function setTache(?Taches $tache): self
+    public function addEvaluation(Evaluation $evaluation): static
     {
-        $this->tache = $tache;
+        if (!$this->evaluations->contains($evaluation)) {
+            $this->evaluations->add($evaluation);
+            $evaluation->setRapport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvaluation(Evaluation $evaluation): static
+    {
+        if ($this->evaluations->removeElement($evaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($evaluation->getRapport() === $this) {
+                $evaluation->setRapport(null);
+            }
+        }
 
         return $this;
     }

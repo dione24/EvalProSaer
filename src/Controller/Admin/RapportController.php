@@ -2,8 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
 use App\Entity\Rapport;
 use App\Form\RapportType;
+
+use App\Entity\Consultant;
 use App\Repository\RapportRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -39,25 +42,63 @@ class RapportController extends AbstractController
         ]);
     }
 
+
     #[Route('/new', name: 'app_rapport_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        // Créer une nouvelle instance de Rapport
         $rapport = new Rapport();
+
+        // Créer un formulaire pour la création de rapport
         $form = $this->createForm(RapportType::class, $rapport);
+
+        // Gérer la soumission du formulaire
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($rapport);
-            $entityManager->flush();
+        // Vérifier si l'utilisateur actuel a l'autorisation de créer un rapport
+        if ($this->isGranted('CREATE', $rapport)) {
+            // L'utilisateur actuel a l'autorisation de créer un rapport
 
-            return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
+            // Obtenir l'utilisateur actuel
+            $user = $security->getUser();
+
+            // Vérifier si l'utilisateur est un Consultant
+            if ($user instanceof User && $user->getConsultant() instanceof Consultant) {
+                // L'utilisateur est un Consultant
+
+                // Assigner le consultant actuel au rapport
+                $consultant = $user->getConsultant();
+                $rapport->setConsultant($consultant);
+
+                // Vérifier si le formulaire est soumis et valide
+                if ($form->isSubmitted() && $form->isValid()) {
+                    // Persiste le rapport dans la base de données
+                    $entityManager->persist($rapport);
+                    $entityManager->flush();
+
+                    // Rediriger vers la page d'index des rapports après la création du rapport
+                    return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
+                }
+            } else {
+                // L'utilisateur actuel n'est pas un Consultant
+                // Vous pouvez gérer cette situation en affichant un message d'erreur ou en redirigeant vers une autre page
+                // Dans cet exemple, nous redirigeons simplement l'utilisateur vers la page d'accueil
+                return $this->redirectToRoute('app_admin_dashboard');
+            }
+        } else {
+            // L'utilisateur actuel n'a pas l'autorisation de créer un rapport
+            // Vous pouvez gérer cette situation en affichant un message d'erreur ou en redirigeant vers une autre page
+            // Dans cet exemple, nous redirigeons simplement l'utilisateur vers la page d'accueil
+            return $this->redirectToRoute('app_admin_dashboard');
         }
 
+        // Afficher le formulaire de création de rapport
         return $this->render('Admin/rapport/new.html.twig', [
             'rapport' => $rapport,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_rapport_show', methods: ['GET'])]
     public function show(Rapport $rapport): Response
@@ -73,6 +114,12 @@ class RapportController extends AbstractController
         $form = $this->createForm(RapportType::class, $rapport);
         $form->handleRequest($request);
 
+        // Récupérer le consultant actuel
+        $consultant = $this->getUser(); // Supposons que vous utilisez Symfony pour gérer l'authentification
+
+        // Assigner le consultant au rapport
+        $rapport->setConsultant($consultant);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
@@ -84,7 +131,6 @@ class RapportController extends AbstractController
             'form' => $form,
         ]);
     }
-
     #[Route('/{id}', name: 'app_rapport_delete', methods: ['POST'])]
     public function delete(Request $request, Rapport $rapport, EntityManagerInterface $entityManager): Response
     {

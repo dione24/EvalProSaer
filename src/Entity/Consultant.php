@@ -31,7 +31,7 @@ class Consultant
     #[ORM\ManyToMany(targetEntity: Taches::class, mappedBy: 'consultant_id')]
     private Collection $taches;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: "consultant", cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
     #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'consultant')]
