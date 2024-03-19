@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Consultant;
 use App\Form\ConsultantType;
 use App\Repository\ConsultantRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,15 +18,16 @@ class ConsultantController extends AbstractController
     #[Route('/', name: 'app_consultant_index', methods: ['GET'])]
     public function index(ConsultantRepository $consultantRepository): Response
     {
-        return $this->render('consultant/index.html.twig', [
+        return $this->render('Admin/consultant/index.html.twig', [
             'consultants' => $consultantRepository->findAll(),
         ]);
     }
 
     #[Route('/new', name: 'app_consultant_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $consultant = new Consultant();
+
         $form = $this->createForm(ConsultantType::class, $consultant);
         $form->handleRequest($request);
 
@@ -36,7 +38,7 @@ class ConsultantController extends AbstractController
             return $this->redirectToRoute('app_consultant_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('consultant/new.html.twig', [
+        return $this->render('Admin/consultant/new.html.twig', [
             'consultant' => $consultant,
             'form' => $form,
         ]);
@@ -45,7 +47,7 @@ class ConsultantController extends AbstractController
     #[Route('/{id}', name: 'app_consultant_show', methods: ['GET'])]
     public function show(Consultant $consultant): Response
     {
-        return $this->render('consultant/show.html.twig', [
+        return $this->render('Admin/consultant/show.html.twig', [
             'consultant' => $consultant,
         ]);
     }
@@ -62,7 +64,7 @@ class ConsultantController extends AbstractController
             return $this->redirectToRoute('app_consultant_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('consultant/edit.html.twig', [
+        return $this->render('Admin/consultant/edit.html.twig', [
             'consultant' => $consultant,
             'form' => $form,
         ]);

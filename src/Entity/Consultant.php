@@ -31,6 +31,9 @@ class Consultant
     #[ORM\ManyToMany(targetEntity: Taches::class, mappedBy: 'consultant_id')]
     private Collection $taches;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->taches = new ArrayCollection();
@@ -113,6 +116,18 @@ class Consultant
         if ($this->taches->removeElement($tach)) {
             $tach->removeConsultantId($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
