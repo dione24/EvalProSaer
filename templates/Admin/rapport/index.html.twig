@@ -41,10 +41,6 @@
 							<tr>
 								<th>Id</th>
 								<th>Periode</th>
-								<th>Realisations</th>
-								<th>Difficultes</th>
-								<th>Propositions_innovation</th>
-								<th>Auto_evaluation</th>
 								<th>actions</th>
 							</tr>
 						</thead>
@@ -52,11 +48,15 @@
 							{% for rapport in rapports %}
 								<tr>
 									<td>{{ rapport.id }}</td>
-									<td>{{ rapport.periode ? rapport.periode|date('Y-m-d') : '' }}</td>
-									<td>{{ rapport.realisations }}</td>
-									<td>{{ rapport.difficultes }}</td>
-									<td>{{ rapport.propositionsInnovation }}</td>
-									<td>{{ rapport.autoEvaluation }}</td>
+									<td>
+										{% if rapport.periode %}
+											{% set trimestre = (rapport.periode|date('n') + 2) / 3 %}
+											Trimestre
+											{{ trimestre|round(0, 'floor') }}
+											{% else %}
+											<!-- Si la période est vide -->
+										{% endif %}
+									</td>
 									<td>
 										<div class="d-flex">
 											<a href="{{ path('app_rapport_show', {'id': rapport.id}) }}" class="btn btn-primary waves-effect waves-light me-2">
@@ -73,20 +73,18 @@
 												</button>
 											</form>
 										</div>
-
-
 									</td>
 								</tr>
-							{% else %}
-								<tr>
-									<td colspan="8">no records found</td>
-								</tr>
-							{% endfor %}
+							</tbody>
 						</tbody>
-					</table>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="8">no records found</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 
-				</div>
-			</div>
-		</div>
 	</div>
-{% endblock %}
+</div></div></div>{% endblock %}

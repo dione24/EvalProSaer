@@ -34,9 +34,6 @@ class Projet
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $date_fin = null;
 
-
-
-
     #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'projet')]
     private Collection $rapports;
 
@@ -46,7 +43,7 @@ class Projet
     #[ORM\OneToMany(targetEntity: Taches::class, mappedBy: 'projet')]
     private Collection $taches;
 
-    #[ORM\OneToMany(targetEntity: Commentaires::class, mappedBy: 'content')]
+    #[ORM\OneToMany(targetEntity: Commentaires::class, mappedBy: 'projet')]
     private Collection $commentaires;
 
     public function __construct()
@@ -133,7 +130,6 @@ class Projet
         return $this;
     }
 
-
     /**
      * @return Collection<int, Rapport>
      */
@@ -146,7 +142,7 @@ class Projet
     {
         if (!$this->rapports->contains($rapport)) {
             $this->rapports->add($rapport);
-            $rapport->setProjetId($this);
+            $rapport->setProjet($this);
         }
 
         return $this;
@@ -156,8 +152,8 @@ class Projet
     {
         if ($this->rapports->removeElement($rapport)) {
             // set the owning side to null (unless already changed)
-            if ($rapport->getProjetId() === $this) {
-                $rapport->setProjetId(null);
+            if ($rapport->getProjet() === $this) {
+                $rapport->setProjet(null);
             }
         }
 
@@ -218,7 +214,7 @@ class Projet
     {
         if (!$this->commentaires->contains($commentaire)) {
             $this->commentaires->add($commentaire);
-            $commentaire->setContent($this);
+            $commentaire->setProjet($this);
         }
 
         return $this;

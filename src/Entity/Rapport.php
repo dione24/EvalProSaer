@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\RapportRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Projet;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\RapportRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: RapportRepository::class)]
 class Rapport
@@ -19,40 +20,36 @@ class Rapport
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $periode = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Consultant", mappedBy="rapports")
-     */
-    private $consultants;
-
-    #[ORM\ManyToOne(inversedBy: 'rapports')]
-    private ?Projet $projet = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $resumeExecutif = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $realisations = null;
+    private ?string $pointsSaillants = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $difficultes = null;
+    private ?string $resultatsObtenus = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $propositions_innovation = null;
+    private ?string $appreciationEvolutionActivite = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $auto_evaluation = null;
+    private ?string $perspectives = null;
 
     #[ORM\ManyToOne(targetEntity: Taches::class, inversedBy: 'rapports')]
     private ?Taches $tache;
 
-
-    #[ORM\ManyToOne(inversedBy: 'rapport')]
-    private ?Consultant $consultant = null;
-
+    #[ORM\ManyToOne(targetEntity: Consultant::class, inversedBy: 'rapports')]
+    private ?Consultant $consultant;
 
     #[ORM\OneToMany(targetEntity: Evaluation::class, mappedBy: 'rapport')]
     private Collection $evaluations;
 
+    #[ORM\ManyToOne(targetEntity: Projet::class, inversedBy: 'rapports')]
+    private ?Projet $projet;
+
+
     public function __construct()
     {
-        $this->consultants = new ArrayCollection();
         $this->evaluations = new ArrayCollection();
     }
 
@@ -69,96 +66,74 @@ class Rapport
     public function setPeriode(\DateTimeImmutable $periode): self
     {
         $this->periode = $periode;
-
         return $this;
     }
 
-    /**
-     * @return Collection|Consultant[]
-     */
-    public function getConsultants()
+    public function getResumeExecutif(): ?string
     {
-        return $this->consultants;
+        return $this->resumeExecutif;
     }
 
-    public function addConsultant(Consultant $consultant): self
+    public function setResumeExecutif(?string $resumeExecutif): self
     {
-        if (!$this->consultants->contains($consultant)) {
-            $this->consultants[] = $consultant;
-            $consultant->addRapport($this);
-        }
-
+        $this->resumeExecutif = $resumeExecutif;
         return $this;
     }
 
-    public function removeConsultant(Consultant $consultant): self
+    public function getPointsSaillants(): ?string
     {
-        $this->consultants->removeElement($consultant);
-        $consultant->removeRapport($this);
+        return $this->pointsSaillants;
+    }
 
+    public function setPointsSaillants(?string $pointsSaillants): self
+    {
+        $this->pointsSaillants = $pointsSaillants;
         return $this;
     }
 
-    public function getProjetId(): ?Projet
+    public function getResultatsObtenus(): ?string
     {
-        return $this->projet;
+        return $this->resultatsObtenus;
     }
 
-    public function setProjetId(?Projet $projet): self
+    public function setResultatsObtenus(?string $resultatsObtenus): self
     {
-        $this->projet = $projet;
-
+        $this->resultatsObtenus = $resultatsObtenus;
         return $this;
     }
 
-    public function getRealisations(): ?string
+    public function getAppreciationEvolutionActivite(): ?string
     {
-        return $this->realisations;
+        return $this->appreciationEvolutionActivite;
     }
 
-    public function setRealisations(string $realisations): self
+    public function setAppreciationEvolutionActivite(?string $appreciationEvolutionActivite): self
     {
-        $this->realisations = $realisations;
-
+        $this->appreciationEvolutionActivite = $appreciationEvolutionActivite;
         return $this;
     }
 
-    public function getDifficultes(): ?string
+    public function getPerspectives(): ?string
     {
-        return $this->difficultes;
+        return $this->perspectives;
     }
 
-    public function setDifficultes(string $difficultes): self
+    public function setPerspectives(?string $perspectives): self
     {
-        $this->difficultes = $difficultes;
-
+        $this->perspectives = $perspectives;
         return $this;
     }
 
-    public function getPropositionsInnovation(): ?string
+    public function getTache(): ?Taches
     {
-        return $this->propositions_innovation;
+        return $this->tache;
     }
 
-    public function setPropositionsInnovation(string $propositions_innovation): self
+    public function setTache(?Taches $tache): self
     {
-        $this->propositions_innovation = $propositions_innovation;
-
+        $this->tache = $tache;
         return $this;
     }
-
-    public function getAutoEvaluation(): ?string
-    {
-        return $this->auto_evaluation;
-    }
-
-    public function setAutoEvaluation(string $auto_evaluation): self
-    {
-        $this->auto_evaluation = $auto_evaluation;
-
-        return $this;
-    }
-
 
     public function getConsultant(): ?Consultant
     {
@@ -168,10 +143,8 @@ class Rapport
     public function setConsultant(?Consultant $consultant): self
     {
         $this->consultant = $consultant;
-
         return $this;
     }
-
 
     /**
      * @return Collection<int, Evaluation>
@@ -181,36 +154,33 @@ class Rapport
         return $this->evaluations;
     }
 
-    public function addEvaluation(Evaluation $evaluation): static
+    public function addEvaluation(Evaluation $evaluation): self
     {
         if (!$this->evaluations->contains($evaluation)) {
-            $this->evaluations->add($evaluation);
+            $this->evaluations[] = $evaluation;
             $evaluation->setRapport($this);
         }
-
         return $this;
     }
 
-    public function removeEvaluation(Evaluation $evaluation): static
+    public function removeEvaluation(Evaluation $evaluation): self
     {
         if ($this->evaluations->removeElement($evaluation)) {
-            // set the owning side to null (unless already changed)
             if ($evaluation->getRapport() === $this) {
                 $evaluation->setRapport(null);
             }
         }
-
         return $this;
     }
 
-    public function getTache(): ?Taches
+    public function getProjet(): ?Projet
     {
-        return $this->tache;
+        return $this->projet;
     }
-    public function setTache(?Taches $tache): self
-    {
-        $this->tache = $tache;
 
+    public function setProjet(?Projet $projet): self
+    {
+        $this->projet = $projet;
         return $this;
     }
 }

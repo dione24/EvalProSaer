@@ -46,24 +46,28 @@ class RapportType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
             ])
-            ->add('realisations', TextareaType::class, [
-                'label' => 'Réalisations',
+            ->add('resumeExecutif', TextareaType::class, [
+                'label' => 'Résumé exécutif',
             ])
-            ->add('difficultes', TextareaType::class, [
-                'label' => 'Difficultés',
+            ->add('pointsSaillants', TextareaType::class, [
+                'label' => 'Points saillants',
             ])
-            ->add('propositions_innovation', TextareaType::class, [
-                'label' => 'Propositions d\'innovation',
+            ->add('resultatsObtenus', TextareaType::class, [
+                'label' => 'Résultats obtenus',
             ])
-            ->add('auto_evaluation', TextareaType::class, [
-                'label' => 'Auto-évaluation',
+            ->add('appreciationEvolutionActivite', TextareaType::class, [
+                'label' => 'Appréciation de l\'évolution de l\'activité',
+            ])
+            ->add('perspectives', TextareaType::class, [
+                'label' => 'Perspectives',
             ]);
-
         // Ajouter le champ projet_id avec les projets accessibles pour l'utilisateur
         $builder->add('tache', EntityType::class, [
             'class' => Taches::class,
             'choices' => $accessibleTaches,
-            'choice_label' => 'description',
+            'choice_label' => function ($tache) {
+                return $tache->getDescription() . ' - ' . $tache->getProjet()->getNom();
+            },
         ]);
 
         // Si le rôle est consultant, le champ consultants ne sera pas multiple

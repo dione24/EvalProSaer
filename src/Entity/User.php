@@ -48,9 +48,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(targetEntity: Consultant::class, mappedBy: 'user')]
     private ?Consultant $consultant = null;
 
+    #[ORM\OneToMany(targetEntity: Commentaires::class, mappedBy: 'user')]
+    private Collection $commentaires;
+
     public function __construct()
     {
         $this->evaluations = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +210,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // set (or unset) the owning side of the relation if necessary
         if ($consultant !== null && $consultant->getUser() !== $this) {
             $consultant->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaires>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaires $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaires $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getUser() === $this) {
+                $commentaire->setUser(null);
+            }
         }
 
         return $this;

@@ -117,11 +117,39 @@
 		<div class="col-lg-4">
 			<div class="card">
 				<div class="card-body">
-					<h4 class="card-title mb-4">Overview</h4>
+					<h4 class="card-title mb-4">
+						Commentaires
+					</h4>
 
-					<div id="overview-chart" class="apex-charts" dir="ltr"></div>
+					<div class="comment-list">
+						{% for commentaire in projet.commentaires %}
+							<div class="p-3">
+								<div class="d-flex">
+									<div class="flex-shrink-0 me-3">
+										<img class="avatar-xs rounded-circle" src="{{ asset('assets/images/users/avatar-2.jpg') }}" alt="">
+									</div>
+									<div class="flex-grow-1">
+										<h5 class="font-size-14 mb-1">
+											{{ commentaire.user.nom }}
+											{{ commentaire.user.prenom }}
+										</h5>
+										<p class="text-muted mb-1">
+											{{ commentaire.content }}
+										</p>
+										<p class="text-muted mb-0">
+											<i class="mdi mdi-clock-outline"></i>
+											{{ commentaire.createdAt|date('Y-m-d H:i:s') }}
+										</p>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+
 				</div>
 			</div>
+
+
 		</div>
 		<!-- end col -->
 
@@ -207,52 +235,52 @@
 
 
 	{# 
-																																																																																																																																						<h1>Projet</h1>
-																																																																																																																																					
-																																																																																																																																						<table class="table">
-																																																																																																																																							<tbody>
-																																																																																																																																								<tr>
-																																																																																																																																									<th>Id</th>
-																																																																																																																																									<td>{{ projet.id }}</td>
-																																																																																																																																								</tr>
-																																																																																																																																								<tr>
-																																																																																																																																									<th>Nom</th>
-																																																																																																																																									<td>{{ projet.nom }}</td>
-																																																																																																																																								</tr>
-																																																																																																																																								<tr>
-																																																																																																																																									<th>Client</th>
-																																																																																																																																									<td>{{ projet.client }}</td>
-																																																																																																																																								</tr>
-																																																																																																																																								<tr>
-																																																																																																																																									<th>Description</th>
-																																																																																																																																									<td>{{ projet.description }}</td>
-																																																																																																																																								</tr>
-																																																																																																																																								<tr>
-																																																																																																																																									<th>Budget</th>
-																																																																																																																																									<td>{{ projet.budget }}</td>
-																																																																																																																																								</tr>
-																																																																																																																																								<tr>
-																																																																																																																																									<th>Date_debut</th>
-																																																																																																																																									<td>{{ projet.dateDebut ? projet.dateDebut|date('Y-m-d') : '' }}</td>
-																																																																																																																																								</tr>
-																																																																																																																																								<tr>
-																																																																																																																																									<th>Date_fin</th>
-																																																																																																																																									<td>{{ projet.dateFin ? projet.dateFin|date('Y-m-d') : '' }}</td>
-																																																																																																																																								</tr>
-																																																																																																																																								<tr>
-																																																																																																																																									<th>Statut</th>
-																																																																																																																																									<td>{{ projet.statut.nom }}</td>
-																																																																																																																																								</tr>
-																																																																																																																																							</tbody>
-																																																																																																																																						</table>
-																																																																																																																																						<div class="mt-3">
-																																																																																																																																							<a href="{{ path('app_projet_index') }}" class="btn btn-secondary me-2">Back to list</a>
-																																																																																																																																							<a href="{{ path('app_projet_edit', {'id': projet.id}) }}" class="btn btn-primary me-2">Edit</a>
-																																																																																																																																							<form method="post" action="{{ path('app_projet_delete', {'id': projet.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display: inline;">
-																																																																																																																																								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ projet.id) }}">
-																																																																																																																																								<button type="submit" class="btn btn-danger">Delete</button>
-																																																																																																																																							</form>
-																																																																																																																																						</div> #}
+																																																																																																																																																							<h1>Projet</h1>
+																																																																																																																																																						
+																																																																																																																																																							<table class="table">
+																																																																																																																																																								<tbody>
+																																																																																																																																																									<tr>
+																																																																																																																																																										<th>Id</th>
+																																																																																																																																																										<td>{{ projet.id }}</td>
+																																																																																																																																																									</tr>
+																																																																																																																																																									<tr>
+																																																																																																																																																										<th>Nom</th>
+																																																																																																																																																										<td>{{ projet.nom }}</td>
+																																																																																																																																																									</tr>
+																																																																																																																																																									<tr>
+																																																																																																																																																										<th>Client</th>
+																																																																																																																																																										<td>{{ projet.client }}</td>
+																																																																																																																																																									</tr>
+																																																																																																																																																									<tr>
+																																																																																																																																																										<th>Description</th>
+																																																																																																																																																										<td>{{ projet.description }}</td>
+																																																																																																																																																									</tr>
+																																																																																																																																																									<tr>
+																																																																																																																																																										<th>Budget</th>
+																																																																																																																																																										<td>{{ projet.budget }}</td>
+																																																																																																																																																									</tr>
+																																																																																																																																																									<tr>
+																																																																																																																																																										<th>Date_debut</th>
+																																																																																																																																																										<td>{{ projet.dateDebut ? projet.dateDebut|date('Y-m-d') : '' }}</td>
+																																																																																																																																																									</tr>
+																																																																																																																																																									<tr>
+																																																																																																																																																										<th>Date_fin</th>
+																																																																																																																																																										<td>{{ projet.dateFin ? projet.dateFin|date('Y-m-d') : '' }}</td>
+																																																																																																																																																									</tr>
+																																																																																																																																																									<tr>
+																																																																																																																																																										<th>Statut</th>
+																																																																																																																																																										<td>{{ projet.statut.nom }}</td>
+																																																																																																																																																									</tr>
+																																																																																																																																																								</tbody>
+																																																																																																																																																							</table>
+																																																																																																																																																							<div class="mt-3">
+																																																																																																																																																								<a href="{{ path('app_projet_index') }}" class="btn btn-secondary me-2">Back to list</a>
+																																																																																																																																																								<a href="{{ path('app_projet_edit', {'id': projet.id}) }}" class="btn btn-primary me-2">Edit</a>
+																																																																																																																																																								<form method="post" action="{{ path('app_projet_delete', {'id': projet.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display: inline;">
+																																																																																																																																																									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ projet.id) }}">
+																																																																																																																																																									<button type="submit" class="btn btn-danger">Delete</button>
+																																																																																																																																																								</form>
+																																																																																																																																																							</div> #}
 
 
 {% endblock %}
