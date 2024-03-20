@@ -28,7 +28,7 @@ class TachesType extends AbstractType
                 'class' => Projet::class,
                 'choice_label' => 'nom',
             ])
-            ->add('consultant_id', EntityType::class, [
+            ->add('consultants', EntityType::class, [
                 'class' => Consultant::class,
                 'choice_label' => 'user.nom',
                 'multiple' => true,

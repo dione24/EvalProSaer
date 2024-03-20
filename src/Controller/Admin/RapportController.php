@@ -65,13 +65,9 @@ class RapportController extends AbstractController
             // Vérifier si l'utilisateur est un Consultant
             if ($user instanceof User && $user->getConsultant() instanceof Consultant) {
                 // L'utilisateur est un Consultant
-
-                // Assigner le consultant actuel au rapport
-                $consultant = $user->getConsultant();
-                $rapport->setConsultant($consultant);
-
                 // Vérifier si le formulaire est soumis et valide
                 if ($form->isSubmitted() && $form->isValid()) {
+                    $rapport->setUser($user);
                     // Persiste le rapport dans la base de données
                     $entityManager->persist($rapport);
                     $entityManager->flush();
@@ -114,13 +110,15 @@ class RapportController extends AbstractController
         $form = $this->createForm(RapportType::class, $rapport);
         $form->handleRequest($request);
 
+
         // Récupérer le consultant actuel
         $consultant = $this->getUser(); // Supposons que vous utilisez Symfony pour gérer l'authentification
 
         // Assigner le consultant au rapport
-        $rapport->setConsultant($consultant);
+        $rapport->setUser($consultant);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);

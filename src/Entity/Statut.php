@@ -24,22 +24,21 @@ class Statut
     #[ORM\OneToMany(targetEntity: Projet::class, mappedBy: 'statut')]
     private Collection $projets;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'statuts')]
-    private ?self $statut = null;
-
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'statut')]
-    private Collection $statuts;
-
     #[ORM\OneToMany(targetEntity: Taches::class, mappedBy: 'statut')]
     private Collection $taches;
+
+    #[ORM\OneToMany(targetEntity: Statut::class, mappedBy: 'statut')]
+    private Collection $statuts;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'statuts')]
+    private ?self $statut = null;
 
     public function __construct()
     {
         $this->projets = new ArrayCollection();
-        $this->statuts = new ArrayCollection();
         $this->taches = new ArrayCollection();
+        $this->statuts = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;

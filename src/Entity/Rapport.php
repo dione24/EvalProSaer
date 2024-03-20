@@ -38,7 +38,10 @@ class Rapport
     #[ORM\ManyToOne(targetEntity: Taches::class, inversedBy: 'rapports')]
     private ?Taches $tache;
 
-    #[ORM\ManyToOne(targetEntity: Consultant::class, inversedBy: 'rapports')]
+
+    /**
+     * @ORM\ManyToOne(targetEntity: Consultant::class, inversedBy="rapports")
+     */
     private ?Consultant $consultant;
 
     #[ORM\OneToMany(targetEntity: Evaluation::class, mappedBy: 'rapport')]
@@ -47,12 +50,15 @@ class Rapport
     #[ORM\ManyToOne(targetEntity: Projet::class, inversedBy: 'rapports')]
     private ?Projet $projet;
 
+    #[ORM\ManyToOne(inversedBy: 'rapports')]
+    private ?User $user = null;
+
+
 
     public function __construct()
     {
         $this->evaluations = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -181,6 +187,18 @@ class Rapport
     public function setProjet(?Projet $projet): self
     {
         $this->projet = $projet;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
         return $this;
     }
 }

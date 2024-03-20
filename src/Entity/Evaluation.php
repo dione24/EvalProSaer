@@ -14,7 +14,7 @@ class Evaluation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'evaluations')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'evaluations')]
     private ?User $responsable = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -23,7 +23,7 @@ class Evaluation
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date_evaluation = null;
 
-    #[ORM\ManyToOne(inversedBy: 'evaluations')]
+    #[ORM\ManyToOne(targetEntity: Rapport::class, inversedBy: 'evaluations')]
     private ?Rapport $rapport = null;
 
     public function getId(): ?int

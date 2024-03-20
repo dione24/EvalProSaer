@@ -26,7 +26,7 @@ class Taches
     private ?float $estimation_temps = null;
 
     #[ORM\ManyToMany(targetEntity: Consultant::class, inversedBy: 'taches')]
-    private Collection $consultants; // Renommé de consultant_id à consultants
+    private Collection $consultants;
 
     #[ORM\ManyToOne(inversedBy: 'taches')]
     private ?Projet $projet = null;
@@ -39,9 +39,10 @@ class Taches
 
     public function __construct()
     {
-        $this->consultants = new ArrayCollection(); // Renommé de consultant_id à consultants
+        $this->consultants = new ArrayCollection();
         $this->rapports = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {

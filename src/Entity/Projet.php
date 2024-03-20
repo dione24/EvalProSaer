@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjetRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Taches;
+use App\Entity\Rapport;
+use App\Entity\Commentaires;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjetRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
 class Projet

@@ -47,12 +47,16 @@ class RapportRepository extends ServiceEntityRepository
     //    }
 
     public function findRapportByUser($user): array
-    {
-        return $this->createQueryBuilder('r')
-            ->leftJoin('r.consultant', 'c')
-            ->andWhere('c.user = :user')
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult();
+    { // selection tous les rapports d'un utilisateur donné via les projets et les taches associés
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT r
+            FROM App\Entity\Rapport r
+            JOIN r.tache t
+            JOIN t.consultants c
+            JOIN c.user u
+            WHERE u.id = :user'
+        )->setParameter('user', $user);
+        return $query->getResult();
     }
 }

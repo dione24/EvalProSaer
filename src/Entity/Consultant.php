@@ -1,12 +1,17 @@
 <?php
 
+
 namespace App\Entity;
 
-use App\Repository\ConsultantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\User;
+use App\Entity\Taches;
+use App\Entity\Rapport;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ConsultantRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ConsultantRepository::class)]
 class Consultant
@@ -28,19 +33,28 @@ class Consultant
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description_profil = null;
 
-    #[ORM\ManyToMany(targetEntity: Taches::class, mappedBy: 'consultant_id')]
+    #[ORM\ManyToMany(targetEntity: Taches::class, mappedBy: 'consultants')]
+
     private Collection $taches;
 
     #[ORM\OneToOne(targetEntity: User::class, inversedBy: "consultant", cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
-    #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'consultant')]
-    private Collection $rapport;
 
-    public function __construct()
+
+
+    /**
+     * @ORM\OneToMany(targetEntity: Rapport::class, mappedBy: "consultant")
+     */
+    private Collection $rapports;
+
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->taches = new ArrayCollection();
-        $this->rapport = new ArrayCollection();
+        $this->rapports = new Collection();
+        $this->entityManager = $entityManager;
     }
 
     public function getId(): ?int
@@ -96,34 +110,6 @@ class Consultant
         return $this;
     }
 
-
-    /**
-     * @return Collection<int, Taches>
-     */
-    public function getTaches(): Collection
-    {
-        return $this->taches;
-    }
-
-    public function addTach(Taches $tach): static
-    {
-        if (!$this->taches->contains($tach)) {
-            $this->taches->add($tach);
-            $tach->addConsultantId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTach(Taches $tach): static
-    {
-        if ($this->taches->removeElement($tach)) {
-            $tach->removeConsultantId($this);
-        }
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -139,29 +125,27 @@ class Consultant
     /**
      * @return Collection<int, Rapport>
      */
-    public function getRapport(): Collection
+    public function getRapports(): Collection
     {
-        return $this->rapport;
+        return $this->rapports;
     }
 
-    public function addRapport(Rapport $rapport): static
+    public function addRapport(Rapport $rapport): self
     {
-        if (!$this->rapport->contains($rapport)) {
-            $this->rapport->add($rapport);
-            $rapport->setConsultant($this);
-        }
+        $this->rapports->add($rapport);
+
+        // Let Doctrine manage the relationship
+        $this->entityManager->persist($rapport);
 
         return $this;
     }
 
-    public function removeRapport(Rapport $rapport): static
+    public function removeRapport(Rapport $rapport): self
     {
-        if ($this->rapport->removeElement($rapport)) {
-            // set the owning side to null (unless already changed)
-            if ($rapport->getConsultant() === $this) {
-                $rapport->setConsultant(null);
-            }
-        }
+        $this->rapports->removeElement($rapport);
+
+        // Let Doctrine manage the relationship
+        $this->entityManager->remove($rapport);
 
         return $this;
     }
