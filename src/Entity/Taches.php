@@ -34,6 +34,9 @@ class Taches
     #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'tache')]
     private Collection $rapports;
 
+    #[ORM\ManyToOne(inversedBy: 'taches')]
+    private ?Statut $statut = null;
+
     public function __construct()
     {
         $this->consultants = new ArrayCollection(); // Renommé de consultant_id à consultants
@@ -136,6 +139,18 @@ class Taches
                 $rapport->setTache(null);
             }
         }
+        return $this;
+    }
+
+    public function getStatut(): ?Statut
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?Statut $statut): static
+    {
+        $this->statut = $statut;
+
         return $this;
     }
 }

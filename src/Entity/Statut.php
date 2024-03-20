@@ -30,10 +30,14 @@ class Statut
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'statut')]
     private Collection $statuts;
 
+    #[ORM\OneToMany(targetEntity: Taches::class, mappedBy: 'statut')]
+    private Collection $taches;
+
     public function __construct()
     {
         $this->projets = new ArrayCollection();
         $this->statuts = new ArrayCollection();
+        $this->taches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,6 +135,36 @@ class Statut
             // set the owning side to null (unless already changed)
             if ($statut->getStatut() === $this) {
                 $statut->setStatut(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Taches>
+     */
+    public function getTaches(): Collection
+    {
+        return $this->taches;
+    }
+
+    public function addTach(Taches $tach): static
+    {
+        if (!$this->taches->contains($tach)) {
+            $this->taches->add($tach);
+            $tach->setStatut($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTach(Taches $tach): static
+    {
+        if ($this->taches->removeElement($tach)) {
+            // set the owning side to null (unless already changed)
+            if ($tach->getStatut() === $this) {
+                $tach->setStatut(null);
             }
         }
 

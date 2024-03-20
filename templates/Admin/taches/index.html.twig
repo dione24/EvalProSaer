@@ -67,8 +67,9 @@
 									<td>{{ tach.description }}</td>
 									<td>{{ tach.priorite }}</td>
 									<td>{{ tach.estimationTemps }}
-										H</td>
-									<td>{{ tach.statut ?? '' }}</td>
+										Jours</td>
+									<td>{{ tach.statut.nom }}</td>
+
 									<td>
 										<div class="d-flex">
 											<a href="{{ path('app_taches_show', {'id': tach.id}) }}" class="btn btn-primary waves-effect waves-light me-2">
