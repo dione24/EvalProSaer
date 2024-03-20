@@ -49,11 +49,15 @@ class Projet
     #[ORM\OneToMany(targetEntity: Commentaires::class, mappedBy: 'projet')]
     private Collection $commentaires;
 
+    #[ORM\OneToMany(targetEntity: Fichiers::class, mappedBy: 'projet')]
+    private Collection $fichiers;
+
     public function __construct()
     {
         $this->rapports = new ArrayCollection();
         $this->taches = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->fichiers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -229,6 +233,36 @@ class Projet
             // set the owning side to null (unless already changed)
             if ($commentaire->getContent() === $this) {
                 $commentaire->setContent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fichiers>
+     */
+    public function getFichiers(): Collection
+    {
+        return $this->fichiers;
+    }
+
+    public function addFichier(Fichiers $fichier): static
+    {
+        if (!$this->fichiers->contains($fichier)) {
+            $this->fichiers->add($fichier);
+            $fichier->setProjet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFichier(Fichiers $fichier): static
+    {
+        if ($this->fichiers->removeElement($fichier)) {
+            // set the owning side to null (unless already changed)
+            if ($fichier->getProjet() === $this) {
+                $fichier->setProjet(null);
             }
         }
 
