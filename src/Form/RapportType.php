@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Projet;
 use App\Entity\Rapport;
 use App\Entity\Consultant;
+use App\Entity\Taches;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -32,11 +33,11 @@ class RapportType extends AbstractType
 
         // Récupérer les projets accessibles par l'utilisateur en fonction de son rôle
         if ($isConsultant) {
-            $accessibleProjects = $this->entityManager->getRepository(Projet::class)->findProjetByUser($user);
+            $accessibleTaches = $this->entityManager->getRepository(Taches::class)->findTachesByUser($user);
             // Suppose que la méthode findProjetByUser() renvoie les projets accessibles pour le consultant
         } else {
             // Pour d'autres rôles comme manager ou admin, récupérez tous les projets
-            $accessibleProjects = $this->entityManager->getRepository(Projet::class)->findAll();
+            $accessibleTaches = $this->entityManager->getRepository(Taches::class)->findAll();
         }
 
         $builder
@@ -59,10 +60,10 @@ class RapportType extends AbstractType
             ]);
 
         // Ajouter le champ projet_id avec les projets accessibles pour l'utilisateur
-        $builder->add('projet_id', EntityType::class, [
-            'class' => Projet::class,
-            'choices' => $accessibleProjects,
-            'choice_label' => 'nom',
+        $builder->add('tache', EntityType::class, [
+            'class' => Taches::class,
+            'choices' => $accessibleTaches,
+            'choice_label' => 'description',
         ]);
 
         // Si le rôle est consultant, le champ consultants ne sera pas multiple

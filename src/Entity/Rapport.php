@@ -39,6 +39,8 @@ class Rapport
     #[ORM\Column(type: Types::TEXT)]
     private ?string $auto_evaluation = null;
 
+    #[ORM\ManyToOne(targetEntity: Taches::class, inversedBy: 'rapports')]
+    private ?Taches $tache;
 
 
     #[ORM\ManyToOne(inversedBy: 'rapport')]
@@ -197,6 +199,17 @@ class Rapport
                 $evaluation->setRapport(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTache(): ?Taches
+    {
+        return $this->tache;
+    }
+    public function setTache(?Taches $tache): self
+    {
+        $this->tache = $tache;
 
         return $this;
     }

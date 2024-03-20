@@ -37,7 +37,7 @@ class Projet
 
 
 
-    #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'projet_id')]
+    #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'projet')]
     private Collection $rapports;
 
     #[ORM\ManyToOne(inversedBy: 'projets')]

@@ -51,7 +51,7 @@ class ProjetRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.taches', 't') // Joindre les tâches du projet
-            ->innerJoin('t.consultant_id', 'c') // Joindre les consultants de la tâche
+            ->innerJoin('t.consultants', 'c') // Joindre les consultants de la tâche
             ->where('c.id = :userId')
             ->setParameter('userId', $user->getId())
             ->getQuery();

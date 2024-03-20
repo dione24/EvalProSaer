@@ -16,8 +16,6 @@ class Taches
     #[ORM\Column]
     private ?int $id = null;
 
-
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -28,7 +26,7 @@ class Taches
     private ?float $estimation_temps = null;
 
     #[ORM\ManyToMany(targetEntity: Consultant::class, inversedBy: 'taches')]
-    private Collection $consultant_id;
+    private Collection $consultants; // Renommé de consultant_id à consultants
 
     #[ORM\ManyToOne(inversedBy: 'taches')]
     private ?Projet $projet = null;
@@ -38,7 +36,7 @@ class Taches
 
     public function __construct()
     {
-        $this->consultant_id = new ArrayCollection();
+        $this->consultants = new ArrayCollection(); // Renommé de consultant_id à consultants
         $this->rapports = new ArrayCollection();
     }
 
@@ -46,8 +44,6 @@ class Taches
     {
         return $this->id;
     }
-
-
 
     public function getDescription(): ?string
     {
@@ -57,7 +53,6 @@ class Taches
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -69,7 +64,6 @@ class Taches
     public function setPriorite(string $priorite): static
     {
         $this->priorite = $priorite;
-
         return $this;
     }
 
@@ -81,31 +75,28 @@ class Taches
     public function setEstimationTemps(float $estimation_temps): static
     {
         $this->estimation_temps = $estimation_temps;
-
         return $this;
     }
 
     /**
      * @return Collection<int, Consultant>
      */
-    public function getConsultantId(): Collection
+    public function getConsultants(): Collection
     {
-        return $this->consultant_id;
+        return $this->consultants;
     }
 
-    public function addConsultantId(Consultant $consultantId): static
+    public function addConsultant(Consultant $consultant): static
     {
-        if (!$this->consultant_id->contains($consultantId)) {
-            $this->consultant_id->add($consultantId);
+        if (!$this->consultants->contains($consultant)) {
+            $this->consultants->add($consultant);
         }
-
         return $this;
     }
 
-    public function removeConsultantId(Consultant $consultantId): static
+    public function removeConsultant(Consultant $consultant): static
     {
-        $this->consultant_id->removeElement($consultantId);
-
+        $this->consultants->removeElement($consultant);
         return $this;
     }
 
@@ -117,7 +108,6 @@ class Taches
     public function setProjet(?Projet $projet): static
     {
         $this->projet = $projet;
-
         return $this;
     }
 
@@ -135,7 +125,6 @@ class Taches
             $this->rapports->add($rapport);
             $rapport->setTache($this);
         }
-
         return $this;
     }
 
@@ -147,7 +136,6 @@ class Taches
                 $rapport->setTache(null);
             }
         }
-
         return $this;
     }
 }
