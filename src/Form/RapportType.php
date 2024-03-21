@@ -73,7 +73,7 @@ class RapportType extends AbstractType
 
         // Si le rôle est consultant, le champ consultants ne sera pas multiple
         if (!$isConsultant) {
-            $builder->add('consultants', EntityType::class, [
+            $builder->add('consultant', EntityType::class, [
                 'class' => Consultant::class,
                 'choice_label' => function ($consultant) {
                     return $consultant->getUser()->getNom(); // Assurez-vous que cette méthode renvoie le nom de l'utilisateur du consultant
