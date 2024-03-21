@@ -21,12 +21,9 @@ class AdminController extends AbstractController
     #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
     public function index(ProjetRepository $projetRepository, TachesRepository $tachesRepository): Response
     {
-        // Vérifiez si l'utilisateur est administrateur ou manager
         if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_MANAGER')) {
-            // Si oui, récupérez tous les projets
             $projets = $projetRepository->findAll();
         } else {
-            // Sinon, récupérez les projets associés à l'utilisateur actuel
             $projets = $projetRepository->findProjetByUser($this->getUser());
         }
 

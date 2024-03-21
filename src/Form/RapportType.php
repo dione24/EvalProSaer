@@ -65,6 +65,7 @@ class RapportType extends AbstractType
         $builder->add('tache', EntityType::class, [
             'class' => Taches::class,
             'choices' => $accessibleTaches,
+            'label' => 'Tâche',
             'choice_label' => function ($tache) {
                 return $tache->getDescription() . ' - ' . $tache->getProjet()->getNom();
             },

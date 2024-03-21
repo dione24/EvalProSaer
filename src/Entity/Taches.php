@@ -22,8 +22,7 @@ class Taches
     #[ORM\Column(length: 255)]
     private ?string $priorite = null;
 
-    #[ORM\Column]
-    private ?float $estimation_temps = null;
+
 
     #[ORM\ManyToMany(targetEntity: Consultant::class, inversedBy: 'taches')]
     private Collection $consultants;
@@ -36,6 +35,12 @@ class Taches
 
     #[ORM\ManyToOne(inversedBy: 'taches')]
     private ?Statut $statut = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $date_debut = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $date_fin = null;
 
     public function __construct()
     {
@@ -71,16 +76,6 @@ class Taches
         return $this;
     }
 
-    public function getEstimationTemps(): ?float
-    {
-        return $this->estimation_temps;
-    }
-
-    public function setEstimationTemps(float $estimation_temps): static
-    {
-        $this->estimation_temps = $estimation_temps;
-        return $this;
-    }
 
     /**
      * @return Collection<int, Consultant>
@@ -151,6 +146,31 @@ class Taches
     public function setStatut(?Statut $statut): static
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+
+    public function getDateDebut(): ?\DateTimeImmutable
+    {
+        return $this->date_debut;
+    }
+
+    public function setDateDebut(?\DateTimeImmutable $date_debut): static
+    {
+        $this->date_debut = $date_debut;
+
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeImmutable
+    {
+        return $this->date_fin;
+    }
+
+    public function setDateFin(?\DateTimeImmutable $date_fin): static
+    {
+        $this->date_fin = $date_fin;
 
         return $this;
     }

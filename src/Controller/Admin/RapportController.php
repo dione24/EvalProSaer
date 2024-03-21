@@ -7,6 +7,7 @@ use App\Entity\Rapport;
 use App\Form\RapportType;
 
 use App\Entity\Consultant;
+use App\Service\RapportService;
 use App\Repository\RapportRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,16 +20,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class RapportController extends AbstractController
 {
     private $security;
+    private $rapportService;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, RapportService $rapportService)
     {
         $this->security = $security;
+        $this->rapportService = $rapportService;
     }
 
     #[Route('/', name: 'app_rapport_index', methods: ['GET'])]
     public function index(RapportRepository $rapportRepository): Response
     {
-        // Vérifiez si l'utilisateur est administrateur ou manager
         if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_MANAGER')) {
             // Si oui, récupérez tous les rapports
             $rapports = $rapportRepository->findAll();
@@ -46,49 +48,26 @@ class RapportController extends AbstractController
     #[Route('/new', name: 'app_rapport_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
-        // Créer une nouvelle instance de Rapport
         $rapport = new Rapport();
-
-        // Créer un formulaire pour la création de rapport
         $form = $this->createForm(RapportType::class, $rapport);
-
-        // Gérer la soumission du formulaire
         $form->handleRequest($request);
-
-        // Vérifier si l'utilisateur actuel a l'autorisation de créer un rapport
         if ($this->isGranted('CREATE', $rapport)) {
-            // L'utilisateur actuel a l'autorisation de créer un rapport
-
-            // Obtenir l'utilisateur actuel
             $user = $security->getUser();
-
-            // Vérifier si l'utilisateur est un Consultant
             if ($user instanceof User && $user->getConsultant() instanceof Consultant) {
-                // L'utilisateur est un Consultant
-                // Vérifier si le formulaire est soumis et valide
                 if ($form->isSubmitted() && $form->isValid()) {
                     $rapport->setUser($user);
-                    // Persiste le rapport dans la base de données
                     $entityManager->persist($rapport);
                     $entityManager->flush();
-
-                    // Rediriger vers la page d'index des rapports après la création du rapport
                     return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
                 }
             } else {
-                // L'utilisateur actuel n'est pas un Consultant
-                // Vous pouvez gérer cette situation en affichant un message d'erreur ou en redirigeant vers une autre page
-                // Dans cet exemple, nous redirigeons simplement l'utilisateur vers la page d'accueil
                 return $this->redirectToRoute('app_admin_dashboard');
             }
         } else {
-            // L'utilisateur actuel n'a pas l'autorisation de créer un rapport
-            // Vous pouvez gérer cette situation en affichant un message d'erreur ou en redirigeant vers une autre page
-            // Dans cet exemple, nous redirigeons simplement l'utilisateur vers la page d'accueil
+
             return $this->redirectToRoute('app_admin_dashboard');
         }
-
-        // Afficher le formulaire de création de rapport
+        $this->addFlash('success', 'Rapport ajouté avec succès');
         return $this->render('Admin/rapport/new.html.twig', [
             'rapport' => $rapport,
             'form' => $form->createView(),
@@ -124,6 +103,7 @@ class RapportController extends AbstractController
             return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        $this->addFlash('success', 'Rapport modifié avec succès');
         return $this->render('Admin/rapport/edit.html.twig', [
             'rapport' => $rapport,
             'form' => $form,
@@ -138,5 +118,18 @@ class RapportController extends AbstractController
         }
 
         return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
+    }
+    //admin_rapport_evaluation using rapportService
+
+    //only admin or manager can evaluate a rapport
+
+
+    #[Route('/{id}/evaluation', name: 'admin_rapport_evaluation', methods: ['POST'])]
+    public function evaluation(Request $request, Rapport $rapport): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN or ROLE_MANAGER');
+        $this->rapportService->addEvaluation($rapport, $this->getUser(), $request->request->get('content'));
+        $this->addFlash('success', 'Evaluation ajoutée avec succès');
+        return $this->redirectToRoute('app_rapport_show', ['id' => $rapport->getId()], Response::HTTP_SEE_OTHER);
     }
 }

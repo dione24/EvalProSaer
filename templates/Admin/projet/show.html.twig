@@ -249,67 +249,114 @@
 
 		</div>
 	</div>
-</div></div><div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-	<form action="{{ path('app_projet_comment_create', {'id': projet.id}) }}" method="post">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="myModalLabel">Ajouter un commentaire</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<h5>
-					Ajouter un commentaire
-				</h5>
-				<div class="mb-3">
-					<label for="content" class="form-label">Commentaire</label>
-					<textarea class="form-control" id="content" name="content" rows="3"></textarea>
-				</div>
-				<input type="hidden" name="projet" value="{{ projet.id }}">
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
-				<button type="submit" class="btn btn-primary waves-effect waves-light">
-					Eneregistrer
-				</button>
-			</div>
-
-		</div>
-	</form>
-	<!-- /.modal-content -->
 </div>
-<!-- /.modal-dialog --></div><div id="myModalFiles" class="modal fade" tabindex="-1" aria-labelledby="myModalLabelFiles" aria-hidden="true">
 
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title mb-5">
+					Chronologie des Tâches</h4>
+				<div class="">
+					<ul class="verti-timeline list-unstyled">
+						{% for  tache in projet.taches %}
+							<li class="event-list">
+								<div class="event-timeline-dot">
+									<i class="bx bx-right-arrow-circle"></i>
+								</div>
+								<div class="d-flex">
+									<div class="flex-shrink-0 me-3">
+										<i class="bx bx-copy-alt h2 text-primary"></i>
+									</div>
+									<div class="flex-grow-1">
+										<div>
+											<h5>
+												{{ tache.description }}
+											</h5>
+											<p class="text-muted">
+												{{ tache.dateDebut ? tache.dateDebut|date('Y-m-d') : '' }}
+												-
+												{{ tache.dateFin ? tache.dateFin|date('Y-m-d') : '' }}
+											</p>
 
-<div class="modal-dialog">
-	<form action="{{ path('app_projet_files_upload', {'id': projet.id}) }}" method="post" enctype="multipart/form-data">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="myModalLabelFiles">
-					Ajouter un fichier
-				</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<h5>
-					Ajouter un fichier
-				</h5>
-				<div class="mb-3">
-					<label for="content" class="form-label">Fichier</label>
-					<input type="file" class="form-control" id="content" name="file">
+										</div>
+									</div>
+								</div>
+							</li>
+						{% endfor %}
 
+					</ul>
 				</div>
-				<input type="hidden" name="projet" value="{{ projet.id }}">
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
-				<button type="submit" class="btn btn-primary waves-effect waves-light">
-					Eneregistrer
-				</button>
-			</div>
-
 		</div>
-	</form>
-	<!-- /.modal-content -->
+	</div>
 </div>
-<!-- /.modal-dialog --></div>{% endblock %}
+
+
+<div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<form action="{{ path('app_projet_comment_create', {'id': projet.id}) }}" method="post">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabel">Ajouter un commentaire</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<h5>
+						Ajouter un commentaire
+					</h5>
+					<div class="mb-3">
+						<label for="content" class="form-label">Commentaire</label>
+						<textarea class="form-control" id="content" name="content" rows="3"></textarea>
+					</div>
+					<input type="hidden" name="projet" value="{{ projet.id }}">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
+					<button type="submit" class="btn btn-primary waves-effect waves-light">
+						Eneregistrer
+					</button>
+				</div>
+
+			</div>
+		</form>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<div id="myModalFiles" class="modal fade" tabindex="-1" aria-labelledby="myModalLabelFiles" aria-hidden="true">
+
+
+	<div class="modal-dialog">
+		<form action="{{ path('app_projet_files_upload', {'id': projet.id}) }}" method="post" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabelFiles">
+						Ajouter un fichier
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<h5>
+						Ajouter un fichier
+					</h5>
+					<div class="mb-3">
+						<label for="content" class="form-label">Fichier</label>
+						<input type="file" class="form-control" id="content" name="file">
+
+					</div>
+					<input type="hidden" name="projet" value="{{ projet.id }}">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
+					<button type="submit" class="btn btn-primary waves-effect waves-light">
+						Eneregistrer
+					</button>
+				</div>
+
+			</div>
+		</form>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>{% endblock %}

@@ -1,9 +1,6 @@
 {% extends 'layouts/app.html.twig' %}
-
-
 {% block body %}
 	<h1>Taches</h1>
-
 	<table class="table">
 		<tbody>
 			<tr>
@@ -19,9 +16,26 @@
 				<th>Priorite</th>
 				<td>{{ tach.priorite }}</td>
 			</tr>
+
 			<tr>
-				<th>Estimation_temps</th>
-				<td>{{ tach.estimationTemps }}</td>
+				<th>DateDebut</th>
+				<td>{{ tach.dateDebut ? tach.dateDebut|date('Y-m-d') : '' }}</td>
+			</tr>
+			<tr>
+				<th>DateFin</th>
+				<td>{{ tach.dateFin ? tach.dateFin|date('Y-m-d') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Durée
+				</th>
+				<td>
+					{% set dateDebut = tach.dateDebut|date('Y-m-d') %}
+					{% set dateFin = tach.dateFin|date('Y-m-d') %}
+					{# Calculer la différence en jours #}
+					{% set difference = dateFin|date_modify('-' ~ dateDebut)|date('z') + 1 %}
+					{{ difference }}
+
+				</td>
 			</tr>
 			<tr>
 				<th>Statut</th>
@@ -31,16 +45,18 @@
 	</table>
 
 	<div class="mt-3">
-		<a href="{{ path('app_taches_index') }}" class="btn btn-secondary me-2">Back to list</a>
-		<a href="{{ path('app_taches_edit', {'id': tach.id}) }}" class="btn btn-primary me-2">Edit</a>
+		<a href="{{ path('app_taches_index') }}" class="btn btn-secondary me-2">
+			<i class="fas fa-arrow-left"></i>
 
-		<form method="post" action="{{ path('app_taches_delete', {'id': tach.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display: inline;">
+		</a>
+		{% if is_granted('ROLE_ADMIN')%}
+			<a href="{{ path('app_taches_edit', {'id': tach.id}) }}" class="btn btn-primary me-2">Edit</a>
+			<form method="post" action="{{ path('app_taches_delete', {'id': tach.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display: inline;">
 
+				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tach.id) }}">
 
-			<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tach.id) }}">
-
-			<button type="submit" class="btn btn-danger">Delete</button>
-		</form>
+				<button type="submit" class="btn btn-danger">Delete</button>
+			</form>
+		{% endif %}
 	</div>
-
 {% endblock %}

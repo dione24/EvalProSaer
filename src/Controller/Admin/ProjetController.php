@@ -65,6 +65,7 @@ class ProjetController extends AbstractController
             return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        $this->addFlash('success', 'Projet ajouté avec succès');
         return $this->render('Admin/projet/new.html.twig', [
             'projet' => $projet,
             'form' => $form,
@@ -92,6 +93,7 @@ class ProjetController extends AbstractController
             return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        $this->addFlash('success', 'Projet modifié avec succès');
         return $this->render('Admin/projet/edit.html.twig', [
             'projet' => $projet,
             'form' => $form,
@@ -105,6 +107,7 @@ class ProjetController extends AbstractController
             $entityManager->remove($projet);
             $entityManager->flush();
         }
+        $this->addFlash('success', 'Projet supprimé avec succès');
 
         return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
     }
@@ -114,6 +117,7 @@ class ProjetController extends AbstractController
     {
         $content = $request->request->get('content');
         $this->commentService->createCommentaire($projet, $content);
+        $this->addFlash('success', 'Commentaire ajouté avec succès');
         return $this->redirectToRoute('app_projet_show', ['id' => $projet->getId()], Response::HTTP_SEE_OTHER);
     }
     #[Route('/commentaire/delete/{id}', name: 'app_projet_comment_delete', methods: ['POST'])]
@@ -121,6 +125,7 @@ class ProjetController extends AbstractController
     {
         $this->commentService->deleteCommentaire($commentaire);
 
+        $this->addFlash('success', 'Commentaire supprimé avec succès');
         return $this->redirectToRoute('app_projet_show', ['id' => $commentaire->getProjet()->getId()], Response::HTTP_SEE_OTHER);
     }
 
@@ -138,6 +143,7 @@ class ProjetController extends AbstractController
     {
         $files = $request->files->get('file');
         $this->uploadFiles->uploadFile($files, $projet);
+        $this->addFlash('success', 'Fichier ajouté avec succès');
         return $this->redirectToRoute('app_projet_show', ['id' => $projet->getId()], Response::HTTP_SEE_OTHER);
     }
 
@@ -159,7 +165,7 @@ class ProjetController extends AbstractController
         // Remove the entity from the database
         $entityManager->remove($fichier);
         $entityManager->flush();
-
+        $this->addFlash('success', 'Fichier supprimé avec succès');
         return $this->redirectToRoute('app_projet_show', ['id' => $projetId], Response::HTTP_SEE_OTHER);
     }
 

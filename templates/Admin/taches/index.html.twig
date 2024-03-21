@@ -66,8 +66,15 @@
 
 									<td>{{ tach.description }}</td>
 									<td>{{ tach.priorite }}</td>
-									<td>{{ tach.estimationTemps }}
-										Jours</td>
+									<td>
+										{% set dateDebut = tach.dateDebut|date('Y-m-d') %}
+										{% set dateFin = tach.dateFin|date('Y-m-d') %}
+										{# Calculer la différence en jours #}
+										{% set difference = dateFin|date_modify('-' ~ dateDebut)|date('z') + 1 %}
+										{{ difference }}
+										Jours
+									</td>
+
 									<td>{{ tach.statut.nom }}</td>
 
 									<td>

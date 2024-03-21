@@ -36,6 +36,8 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        $this->addFlash('success', 'Utilisateur ajouté avec succès');
+
         return $this->render('user/new.html.twig', [
             'user' => $user,
             'form' => $form,
@@ -61,7 +63,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
-
+        $this->addFlash('success', 'Utilisateur modifié avec succès');
         return $this->render('user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
@@ -76,6 +78,7 @@ class UserController extends AbstractController
             $entityManager->flush();
         }
 
+        $this->addFlash('success', 'Utilisateur supprimé avec succès');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

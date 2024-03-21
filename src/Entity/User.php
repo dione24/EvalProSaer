@@ -42,8 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\OneToMany(targetEntity: Evaluation::class, mappedBy: 'responsable')]
-    private Collection $evaluations;
+
 
     #[ORM\OneToOne(targetEntity: Consultant::class, mappedBy: 'user')]
     private ?Consultant $consultant = null;
@@ -54,11 +53,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Rapport::class, mappedBy: 'user')]
     private Collection $rapports;
 
+    #[ORM\OneToMany(targetEntity: Evaluation::class, mappedBy: 'user')]
+    private Collection $evaluations;
+
     public function __construct()
     {
-        $this->evaluations = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->rapports = new ArrayCollection();
+        $this->evaluations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,35 +174,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Evaluation>
-     */
-    public function getEvaluations(): Collection
-    {
-        return $this->evaluations;
-    }
 
-    public function addEvaluation(Evaluation $evaluation): static
-    {
-        if (!$this->evaluations->contains($evaluation)) {
-            $this->evaluations->add($evaluation);
-            $evaluation->setResponsable($this);
-        }
 
-        return $this;
-    }
-
-    public function removeEvaluation(Evaluation $evaluation): static
-    {
-        if ($this->evaluations->removeElement($evaluation)) {
-            // set the owning side to null (unless already changed)
-            if ($evaluation->getResponsable() === $this) {
-                $evaluation->setResponsable(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getConsultant(): ?Consultant
     {
@@ -273,6 +248,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($rapport->getUser() === $this) {
                 $rapport->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evaluation>
+     */
+    public function getEvaluations(): Collection
+    {
+        return $this->evaluations;
+    }
+
+    public function addEvaluation(Evaluation $evaluation): static
+    {
+        if (!$this->evaluations->contains($evaluation)) {
+            $this->evaluations->add($evaluation);
+            $evaluation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvaluation(Evaluation $evaluation): static
+    {
+        if ($this->evaluations->removeElement($evaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($evaluation->getUser() === $this) {
+                $evaluation->setUser(null);
             }
         }
 

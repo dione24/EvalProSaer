@@ -52,6 +52,7 @@ class TachesController extends AbstractController
 
             return $this->redirectToRoute('app_taches_index', [], Response::HTTP_SEE_OTHER);
         }
+        $this->addFlash('success', 'Tâche ajoutée avec succès');
         return $this->render('Admin/taches/new.html.twig', [
             'tach' => $tach,
             'form' => $form,
@@ -77,7 +78,7 @@ class TachesController extends AbstractController
 
             return $this->redirectToRoute('app_taches_index', [], Response::HTTP_SEE_OTHER);
         }
-
+        $this->addFlash('success', 'Tâche modifiée avec succès');
         return $this->render('Admin/taches/edit.html.twig', [
             'tach' => $tach,
             'form' => $form,

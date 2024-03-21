@@ -14,11 +14,8 @@ class Evaluation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'evaluations')]
-    private ?User $responsable = null;
-
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $contenu = null;
+    private ?string $content = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date_evaluation = null;
@@ -26,31 +23,24 @@ class Evaluation
     #[ORM\ManyToOne(targetEntity: Rapport::class, inversedBy: 'evaluations')]
     private ?Rapport $rapport = null;
 
+    #[ORM\ManyToOne(inversedBy: 'evaluations')]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getResponsable(): ?User
+
+
+    public function getContent(): ?string
     {
-        return $this->responsable;
+        return $this->content;
     }
 
-    public function setResponsable(?User $responsable): static
+    public function setContent(string $content): static
     {
-        $this->responsable = $responsable;
-
-        return $this;
-    }
-
-    public function getContenu(): ?string
-    {
-        return $this->contenu;
-    }
-
-    public function setContenu(string $contenu): static
-    {
-        $this->contenu = $contenu;
+        $this->content = $content;
 
         return $this;
     }
@@ -75,6 +65,18 @@ class Evaluation
     public function setRapport(?Rapport $rapport): static
     {
         $this->rapport = $rapport;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
