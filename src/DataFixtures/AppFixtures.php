@@ -82,8 +82,7 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
-        // on demande d'exécuter les requetes
-        $manager->flush();
+
 
 
         //add  Statut de tache
@@ -99,5 +98,7 @@ class AppFixtures extends Fixture
             $statut->setCouleur("#" . substr(md5(rand()), 0, 6));
             $manager->persist($statut);
         }
+        // on demande d'exécuter les requetes
+        $manager->flush();
     }
 }

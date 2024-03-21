@@ -27,11 +27,11 @@ class Statut
     #[ORM\OneToMany(targetEntity: Taches::class, mappedBy: 'statut')]
     private Collection $taches;
 
+
     #[ORM\OneToMany(targetEntity: Statut::class, mappedBy: 'statut')]
     private Collection $statuts;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'statuts')]
-    private ?self $statut = null;
+
 
     public function __construct()
     {
@@ -98,17 +98,7 @@ class Statut
         return $this;
     }
 
-    public function getStatut(): ?self
-    {
-        return $this->statut;
-    }
 
-    public function setStatut(?self $statut): static
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, self>
@@ -122,7 +112,6 @@ class Statut
     {
         if (!$this->statuts->contains($statut)) {
             $this->statuts->add($statut);
-            $statut->setStatut($this);
         }
 
         return $this;
@@ -130,12 +119,7 @@ class Statut
 
     public function removeStatut(self $statut): static
     {
-        if ($this->statuts->removeElement($statut)) {
-            // set the owning side to null (unless already changed)
-            if ($statut->getStatut() === $this) {
-                $statut->setStatut(null);
-            }
-        }
+        $this->statuts->removeElement($statut);
 
         return $this;
     }
