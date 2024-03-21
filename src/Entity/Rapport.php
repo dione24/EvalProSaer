@@ -54,7 +54,8 @@ class Rapport
     private ?User $user = null;
 
 
-
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
     public function __construct()
     {
         $this->evaluations = new ArrayCollection();
@@ -198,6 +199,18 @@ class Rapport
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

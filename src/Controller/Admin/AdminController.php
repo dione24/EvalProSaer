@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/')]
 class AdminController extends AbstractController
 {
     private $security;
@@ -18,16 +19,17 @@ class AdminController extends AbstractController
         $this->security = $security;
     }
 
-    #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
+    #[Route('/dashboard', name: 'app_admin_dashboard')]
     public function index(ProjetRepository $projetRepository, TachesRepository $tachesRepository): Response
     {
         if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_MANAGER')) {
             $projets = $projetRepository->findAll();
+            $taches = $tachesRepository->findAll();
         } else {
             $projets = $projetRepository->findProjetByUser($this->getUser());
+            $taches = $tachesRepository->findTachesByUser($this->getUser());
         }
 
-        $taches = $tachesRepository->findTachesByUser($this->getUser());
         return $this->render('Admin/index.html.twig', [
             'controller_name' => 'AdminController',
             'projets' => $projets,
@@ -35,11 +37,28 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/calendar', name: 'app_admin_calendar')]
+    #[Route('/calendar', name: 'app_admin_calendar')]
     public function calendar(): Response
     {
-        return $this->render('Admin/calendar.html.twig', [
+        return $this->render('Admin/calendar/calendar.html.twig', [
             'controller_name' => 'AdminController',
         ]);
+    }
+
+    //calendar get API
+    #[Route('/calendar/events', name: 'app_admin_calendar_events', methods: ['GET'])]
+    public function calendarEvents(TachesRepository $tachesRepository): Response
+    {
+        $taches = $tachesRepository->findAll();
+        $data = [];
+        foreach ($taches as $tache) {
+            $data[] = [
+                'id' => $tache->getId(),
+                'title' => $tache->getDescription(),
+                'start' => $tache->getDateDebut()->format('Y-m-d H:i:s'),
+                'end' => $tache->getDateFin()->format('Y-m-d H:i:s'),
+            ];
+        }
+        return $this->json($data);
     }
 }

@@ -59,6 +59,7 @@ class ProjetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $projet->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($projet);
             $entityManager->flush();
 
@@ -89,7 +90,6 @@ class ProjetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
             return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
         }
 

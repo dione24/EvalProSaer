@@ -33,17 +33,14 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-5 align-self-end">
-							<img src="{{asset('assets/images/profile-img.png')}}" alt="" class="img-fluid">
-						</div>
+
 					</div>
 				</div>
 				<div class="card-body pt-0">
 					<div class="row">
 						<div class="col-sm-4">
-							<div class="avatar-md profile-user-wid mb-4">
-								<img src="{{asset('assets/images/users/avatar-1.jpg')}}" alt="" class="img-thumbnail rounded-circle">
-							</div>
+							<br>
+
 							<h5 class="font-size-15 text-truncate">
 								{{ app.user.nom }}
 							</h5>
@@ -195,12 +192,11 @@
 		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title mb-4">
-					Mes taches en cours
+					Mes Tâches
 				</h4>
 				<div class="table-responsive">
 					<table class="table table-nowrap align-middle mb-0">
 						<tbody>
-
 
 							{% for tache in taches %}
 								<tr>
@@ -238,19 +234,11 @@
 	</div>
 </div></div><div class="row">
 {% for projet in projets %}
-
-
 	<div class="col-xl-4 col-sm-6">
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex">
-					<div class="flex-shrink-0 me-4">
-						<div class="avatar-md">
-							<span class="avatar-title rounded-circle bg-light text-danger font-size-16">
-								<img src="{{asset('assets/images/companies/img-1.png')}}" alt="" height="30">
-							</span>
-						</div>
-					</div>
+
 					<div class="flex-grow-1 overflow-hidden">
 						<h5 class="text-truncate font-size-15">
 							<a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="text-dark">
@@ -259,16 +247,9 @@
 								</p>
 							</a>
 						</h5>
-						<p class="text-muted mb-4">
+						<p class="text-muted mb-1">
 							{{ projet.description }}
 						</p>
-						<div class="avatar-group">
-							<div class="avatar-group-item">
-								<a href="javascript: void(0);" class="d-inline-block">
-									<img src="{{asset('assets/images/users/avatar-4.jpg')}}" alt="" class="rounded-circle avatar-xs">
-								</a>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>

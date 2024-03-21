@@ -9,7 +9,9 @@ use App\Entity\Consultant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -22,8 +24,12 @@ class TachesType extends AbstractType
                 'attr' => ['class' => 'tinymce'],
             ])
             ->add('priorite', IntegerType::class)
-            ->add('estimation_temps', IntegerType::class)
-
+            ->add('dateDebut', DateType::class, [
+                'label' => 'Date de début',
+            ])
+            ->add('dateFin', DateType::class, [
+                'label' => 'Date de fin',
+            ])
             ->add('projet', EntityType::class, [
                 'class' => Projet::class,
                 'choice_label' => 'nom',

@@ -56,6 +56,7 @@ class RapportController extends AbstractController
             if ($user instanceof User && $user->getConsultant() instanceof Consultant) {
                 if ($form->isSubmitted() && $form->isValid()) {
                     $rapport->setUser($user);
+                    $rapport->setCreatedAt(new \DateTimeImmutable());
                     $entityManager->persist($rapport);
                     $entityManager->flush();
                     return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
@@ -97,12 +98,9 @@ class RapportController extends AbstractController
         $rapport->setUser($consultant);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $entityManager->flush();
-
             return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
         }
-
         $this->addFlash('success', 'Rapport modifié avec succès');
         return $this->render('Admin/rapport/edit.html.twig', [
             'rapport' => $rapport,
@@ -119,11 +117,6 @@ class RapportController extends AbstractController
 
         return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
     }
-    //admin_rapport_evaluation using rapportService
-
-    //only admin or manager can evaluate a rapport
-
-
     #[Route('/{id}/evaluation', name: 'admin_rapport_evaluation', methods: ['POST'])]
     public function evaluation(Request $request, Rapport $rapport): Response
     {

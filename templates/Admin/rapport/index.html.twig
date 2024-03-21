@@ -41,6 +41,7 @@
 							<tr>
 								<th>Id</th>
 								<th>Periode</th>
+								<th>Crée le</th>
 								<th>actions</th>
 							</tr>
 						</thead>
@@ -57,6 +58,7 @@
 											<!-- Si la période est vide -->
 										{% endif %}
 									</td>
+									<td>{{ rapport.createdAt|date('d/m/Y') }}</td>
 									<td>
 										<div class="d-flex">
 											<a href="{{ path('app_rapport_show', {'id': rapport.id}) }}" class="btn btn-primary waves-effect waves-light me-2">

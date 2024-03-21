@@ -2,13 +2,14 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\User;
-use App\Repository\GenreRepository;
+use App\Entity\Statut;
 use DateTimeImmutable;
+use App\Repository\GenreRepository;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -83,5 +84,20 @@ class AppFixtures extends Fixture
 
         // on demande d'exécuter les requetes
         $manager->flush();
+
+
+        //add  Statut de tache
+        $statut = [
+            "En cours",
+            "Terminé",
+            "En attente",
+            "Annulé"
+        ];
+        foreach ($statut as $value) {
+            $statut = new Statut;
+            $statut->setNom($value);
+            $statut->setCouleur("#" . substr(md5(rand()), 0, 6));
+            $manager->persist($statut);
+        }
     }
 }

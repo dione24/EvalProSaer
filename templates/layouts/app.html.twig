@@ -18,8 +18,14 @@
 
 		<link rel="stylesheet" href="{{asset('assets/libs/owl.carousel/assets/owl.carousel.min.css')}}">
 
+		<link rel="stylesheet" href="{{asset('assets/libs/owl.carousel/assets/owl.theme.default.min.css')}}">
+
+		<link href="{{asset('assets/libs/@fullcalendar/core/main.min.css')}}" rel="stylesheet" type="text/css"/>
+		<link href="{{asset('assets/libs/@fullcalendar/daygrid/main.min.css')}}" rel="stylesheet" type="text/css"/>
+		<link href="{{asset('assets/libs/@fullcalendar/bootstrap/main.min.css')}}" rel="stylesheet" type="text/css"/>
 		<link
-		rel="stylesheet" href="{{asset('assets/libs/owl.carousel/assets/owl.theme.default.min.css')}}">
+		href="{{asset('assets/libs/@fullcalendar/timegrid/main.min.css')}}" rel="stylesheet" type="text/css"/>
+
 
 		<!-- Responsive datatable examples -->
 		<link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css"/>
@@ -162,7 +168,7 @@
 								<a href="{{ path('app_taches_index') }}" class="waves-effect">
 									<i class="bx bx-layout"></i>
 									<span key="t-horizontal">
-										Taches
+										Tâches
 									</span>
 								</a>
 							</li>
@@ -190,8 +196,15 @@
 			<!-- Start right Content here -->
 			<!-- ============================================================== -->
 				<div class="main-content"> <div class="page-content">
-					<div
-						class="container-fluid">
+					<div class="container-fluid">
+						{% for label, messages in app.flashes %}
+							{% for message in messages %}
+								<div class="alert alert-{{label}} alert-dismissible fade show" role="alert">
+									{{ message }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							{% endfor %}
+						{% endfor %}
 
 						<!-- start page title -->
 						{%block body%}
@@ -250,8 +263,18 @@
 
 		<script src="assets/js/pages/datatables.init.js"></script>
 
+
+		<script src="{{asset('assets/libs/jquery-ui-dist/jquery-ui.min.js')}}"></script>
+		<script src="{{asset('assets/libs/@fullcalendar/core/main.min.js')}}"></script>
+		<script src="{{asset('assets/libs/@fullcalendar/bootstrap/main.min.js')}}"></script>
+		<script src="{{asset('assets/libs/@fullcalendar/daygrid/main.min.js')}}"></script>
+		<script src="{{asset('assets/libs/@fullcalendar/timegrid/main.min.js')}}"></script>
+		<script src="{{asset('assets/libs/@fullcalendar/interaction/main.min.js')}}"></script>
+
+		<!-- Calendar init -->
+		<script src="{{asset('assets/js/pages/calendars-full.init.js')}}"></script>
+
+
 		<script src="{{asset('assets/js/app.js')}}"></script>
-
-
 	</body>
 </html>

@@ -52,6 +52,9 @@ class Projet
     #[ORM\OneToMany(targetEntity: Fichiers::class, mappedBy: 'projet')]
     private Collection $fichiers;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->rapports = new ArrayCollection();
@@ -265,6 +268,18 @@ class Projet
                 $fichier->setProjet(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
