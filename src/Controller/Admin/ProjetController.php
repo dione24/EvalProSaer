@@ -62,11 +62,11 @@ class ProjetController extends AbstractController
             $projet->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($projet);
             $entityManager->flush();
+            $this->addFlash('success', 'Projet ajouté avec succès');
 
             return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        $this->addFlash('success', 'Projet ajouté avec succès');
         return $this->render('Admin/projet/new.html.twig', [
             'projet' => $projet,
             'form' => $form,
@@ -90,10 +90,11 @@ class ProjetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('success', 'Projet modifié avec succès');
+
             return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        $this->addFlash('success', 'Projet modifié avec succès');
         return $this->render('Admin/projet/edit.html.twig', [
             'projet' => $projet,
             'form' => $form,

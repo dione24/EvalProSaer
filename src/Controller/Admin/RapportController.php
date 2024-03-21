@@ -59,6 +59,8 @@ class RapportController extends AbstractController
                     $rapport->setCreatedAt(new \DateTimeImmutable());
                     $entityManager->persist($rapport);
                     $entityManager->flush();
+                    $this->addFlash('success', 'Rapport ajouté avec succès');
+
                     return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
                 }
             } else {
@@ -68,7 +70,6 @@ class RapportController extends AbstractController
 
             return $this->redirectToRoute('app_admin_dashboard');
         }
-        $this->addFlash('success', 'Rapport ajouté avec succès');
         return $this->render('Admin/rapport/new.html.twig', [
             'rapport' => $rapport,
             'form' => $form->createView(),
@@ -99,9 +100,10 @@ class RapportController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('success', 'Rapport modifié avec succès');
+
             return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
         }
-        $this->addFlash('success', 'Rapport modifié avec succès');
         return $this->render('Admin/rapport/edit.html.twig', [
             'rapport' => $rapport,
             'form' => $form,

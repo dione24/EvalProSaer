@@ -35,10 +35,10 @@ class ConsultantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($consultant);
             $entityManager->flush();
+            $this->addFlash('success', 'Consultant ajouté avec succès');
 
             return $this->redirectToRoute('app_consultant_index', [], Response::HTTP_SEE_OTHER);
         }
-        $this->addFlash('success', 'Consultant ajouté avec succès');
         return $this->render('Admin/consultant/new.html.twig', [
             'consultant' => $consultant,
             'form' => $form,
@@ -61,11 +61,11 @@ class ConsultantController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('success', 'Consultant modifié avec succès');
 
             return $this->redirectToRoute('app_consultant_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        $this->addFlash('success', 'Consultant modifié avec succès');
         return $this->render('Admin/consultant/edit.html.twig', [
             'consultant' => $consultant,
             'form' => $form,
