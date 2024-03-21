@@ -46,14 +46,14 @@ class Consultant
     /**
      * @ORM\OneToMany(targetEntity: Rapport::class, mappedBy: "consultant")
      */
-    private Collection $rapports;
+    private ArrayCollection $rapports;
 
     private $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->taches = new ArrayCollection();
-        $this->rapports = new Collection();
+        $this->rapports = new ArrayCollection(); // Initialize rapports as ArrayCollection
         $this->entityManager = $entityManager;
     }
 
