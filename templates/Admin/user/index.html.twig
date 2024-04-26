@@ -1,45 +1,91 @@
-<!DOCTYPE html>
-
-<title>User index</title>
-
+{% extends "layouts/app.html.twig" %}
+{% block title %}
+	Liste des Projets
+{% endblock %}
 {% block body %}
-    <h1>User index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Username</th>
-                <th>Roles</th>
-                <th>Password</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Email</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.nom }}</td>
-                <td>{{ user.prenom }}</td>
-                <td>{{ user.email }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<!-- start page title -->
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+				<h4 class="mb-sm-0 font-size-18">
+					Liste des Projets
+				</h4>
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item">
+							<a href="javascript: void(0);">
+								Projets
+							</a>
+						</li>
+						<li class="breadcrumb-item active">
+							Index
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end page title -->
 
-    <a href="{{ path('app_user_new') }}">Create new</a>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					{% if is_granted('ROLE_ADMIN') %}
+
+						<a href="{{ path('app_user_new') }}" class="btn btn-primary waves-effect waves-light mb-3">
+
+
+							<i class="mdi mdi-plus me-2"></i>
+							Ajouter un Utilisateur
+						</a>
+					{% endif %}
+
+					<table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Username</th>
+								<th>Roles</th>
+								<th>Nom</th>
+								<th>Prenom</th>
+								<th>Email</th>
+								<th>actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for user in users %}
+								<tr>
+									<td>{{ user.id }}</td>
+									<td>{{ user.username }}</td>
+									<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+									<td>{{ user.nom }}</td>
+									<td>{{ user.prenom }}</td>
+									<td>{{ user.email }}</td>
+									<td>
+										{% if is_granted('ROLE_ADMIN') %}
+											<a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm">
+												<i class="mdi mdi-pencil me-2"></i>
+												Edit
+											</a>
+											<a href="{{ path('app_user_delete', {'id': user.id}) }}" class="btn btn-danger btn-sm">
+												<i class="mdi mdi-trash-can me-2"></i>
+												Delete
+											</a>
+										{% endif %}
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="8">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -1,11 +1,52 @@
-<!DOCTYPE html>
-
-<title>New User</title>
-
+{% extends 'layouts/app.html.twig' %}
+{% block title %}
+	Ajouter un Utilisateur
+{% endblock %}
 {% block body %}
-    <h1>Create new User</h1>
+	<!-- start page title -->
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+				<h4 class="mb-sm-0 font-size-18">
+					Liste des Utilisateurs
+				</h4>
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item">
+							<a href="javascript: void(0);">
+								Users
+							</a>
+						</li>
+						<li class="breadcrumb-item active">
+							Index
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end page title -->
 
-    {{ include('user/_form.html.twig') }}
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					{{ form_start(form) }}
+					{{ form_widget(form) }}
+					<button class="btn btn-success">{{ button_label|default('Save') }}</button>
+					{{ form_end(form) }}
+				</div>
+				<div class="card-footer">
+					<a href="{{ path('app_user_index') }}" class="btn btn-secondary">
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+						Retour à la liste
+					</a>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+	<!-- end row -->
+
 {% endblock %}

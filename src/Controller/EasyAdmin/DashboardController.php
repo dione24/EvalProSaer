@@ -6,6 +6,7 @@ use App\Entity\Projet;
 use App\Entity\Taches;
 use App\Entity\Rapport;
 use App\Entity\Consultant;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -35,6 +36,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Consultant', 'fas fa-list', Consultant::class);
         yield MenuItem::linkToCrud('Projet', 'fas fa-list', Projet::class);
         yield MenuItem::linkToCrud('Taches', 'fas fa-list', Taches::class);
+        yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
 
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
