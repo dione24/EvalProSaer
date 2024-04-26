@@ -170,26 +170,29 @@
 									</span>
 								</a>
 							</li>
+							{% if is_granted('ROLE_ADMIN') %}
 
-							<li>
-								<a href="{{ path('app_user_index') }}" class="waves-effect">
 
-									<i class="bx bx-layout"></i>
-									<span key="t-horizontal">
-										Users
-									</span>
-								</a>
-							</li>
+								<li>
+									<a href="{{ path('app_user_index') }}" class="waves-effect">
 
-{# <li>
-								<a href="{{ path('app_admin_calendar') }}" class="waves-effect">
+										<i class="bx bx-layout"></i>
+										<span key="t-horizontal">
+											Users
+										</span>
+									</a>
+								</li>
+							{% endif %}
 
-									<i class="bx bx-layout"></i>
-									<span key="t-horizontal">
-										Calendrier
-									</span>
-								</a>
-							</li> #}
+							{# <li>
+																																																													<a href="{{ path('app_admin_calendar') }}" class="waves-effect">
+																																																					
+																																																														<i class="bx bx-layout"></i>
+																																																														<span key="t-horizontal">
+																																																															Calendrier
+																																																														</span>
+																																																													</a>
+																																																												</li> #}
 
 
 						</ul>
@@ -287,4 +290,4 @@
 
 		<script src="{{asset('assets/js/app.js')}}"></script>
 	</body>
-</html>
+</html></body></html>
