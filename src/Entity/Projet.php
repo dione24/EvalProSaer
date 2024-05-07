@@ -28,9 +28,6 @@ class Projet
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $budget = null;
-
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $date_debut = null;
 
@@ -54,6 +51,9 @@ class Projet
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'projets')]
+    private ?user $user = null;
 
     public function __construct()
     {
@@ -104,17 +104,7 @@ class Projet
         return $this;
     }
 
-    public function getBudget(): ?float
-    {
-        return $this->budget;
-    }
 
-    public function setBudget(?float $budget): static
-    {
-        $this->budget = $budget;
-
-        return $this;
-    }
 
     public function getDateDebut(): ?\DateTimeImmutable
     {
@@ -280,6 +270,18 @@ class Projet
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

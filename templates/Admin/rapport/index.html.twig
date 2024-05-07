@@ -31,13 +31,15 @@
 	<div class="row">
 		<div class="col-12">
 			<div class="card">
-				<div class="card-body">
-					{% if is_granted('ROLE_CONSULTANT')  %}
-						<a href="{{ path('app_rapport_new') }}" class="btn btn-primary waves-effect waves-light mb-3">
-							<i class="mdi mdi-plus me-2"></i>
-							Ajouter un nouveau rapport
-						</a>
-					{% endif %}
+				<div
+					class="card-body">
+					{# {% if is_granted('ROLE_CONSULTANT')  %}
+																<a href="{{ path('app_rapport_new') }}" class="btn btn-primary waves-effect waves-light mb-3">
+																	<i class="mdi mdi-plus me-2"></i>
+																	Ajouter un nouveau rapport
+																</a>
+															{% endif %} #}
+
 					<table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
 						<thead>
 							<tr>

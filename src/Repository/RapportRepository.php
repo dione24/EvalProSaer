@@ -59,4 +59,17 @@ class RapportRepository extends ServiceEntityRepository
         )->setParameter('user', $user);
         return $query->getResult();
     }
+
+    //find user Rapport
+    public function findUserRapport($user): array
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT r
+            FROM App\Entity\Rapport r
+            JOIN r.user u
+            WHERE u.id = :user'
+        )->setParameter('user', $user);
+        return $query->getResult();
+    }
 }

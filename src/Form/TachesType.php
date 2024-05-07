@@ -22,17 +22,34 @@ class TachesType extends AbstractType
         $builder
             ->add('description', TextareaType::class, [
                 'attr' => ['class' => 'tinymce'],
+                'label' => 'Description de la tâche',
+                'required' => true,
             ])
-            ->add('priorite', IntegerType::class)
+            ->add('priorite', IntegerType::class, [
+                'label' => 'Priorité',
+                'required' => true,
+            ])
             ->add('dateDebut', DateType::class, [
                 'label' => 'Date de début',
+                'attr' => [
+                    'class' => 'form-control',
+                    'required' => true
+                ],
             ])
             ->add('dateFin', DateType::class, [
                 'label' => 'Date de fin',
+                'attr' => [
+                    'class' => 'form-control',
+                    'required' => true
+                ],
             ])
             ->add('projet', EntityType::class, [
                 'class' => Projet::class,
                 'choice_label' => 'nom',
+                'attr' => [
+                    'class' => 'form-control',
+                    'required' => true
+                ],
             ])
             ->add('consultants', EntityType::class, [
                 'class' => Consultant::class,

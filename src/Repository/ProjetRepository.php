@@ -57,4 +57,14 @@ class ProjetRepository extends ServiceEntityRepository
             ->getQuery();
         return $qb->getResult();
     }
+
+    //get all projet for user
+    public function findUserProject(User $user): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.user = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery();
+        return $qb->getResult();
+    }
 }

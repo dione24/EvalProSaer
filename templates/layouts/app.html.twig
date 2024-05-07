@@ -153,15 +153,18 @@
 									</span>
 								</a>
 							</li>
+							{% if is_granted('ROLE_MANAGER') or is_granted('ROLE_ADMIN') %}
+								<li>
+									<a href="{{ path('app_rapport_index') }}" class="waves-effect">
+										<i class="bx bx-layout"></i>
+										<span key="t-horizontal">
+											Rapports
+										</span>
+									</a>
+								</li>
+							{% endif %}
 
-							<li>
-								<a href="{{ path('app_rapport_index') }}" class="waves-effect">
-									<i class="bx bx-layout"></i>
-									<span key="t-horizontal">
-										Rapports
-									</span>
-								</a>
-							</li>
+
 							<li>
 								<a href="{{ path('app_taches_index') }}" class="waves-effect">
 									<i class="bx bx-layout"></i>
@@ -185,14 +188,14 @@
 							{% endif %}
 
 							{# <li>
-																																																													<a href="{{ path('app_admin_calendar') }}" class="waves-effect">
-																																																					
-																																																														<i class="bx bx-layout"></i>
-																																																														<span key="t-horizontal">
-																																																															Calendrier
-																																																														</span>
-																																																													</a>
-																																																												</li> #}
+																																																																																																																																																																																																																																																																																																										<a href="{{ path('app_admin_calendar') }}" class="waves-effect">
+																																																																																																																																																																																																																																																																																																		
+																																																																																																																																																																																																																																																																																																											<i class="bx bx-layout"></i>
+																																																																																																																																																																																																																																																																																																											<span key="t-horizontal">
+																																																																																																																																																																																																																																																																																																												Calendrier
+																																																																																																																																																																																																																																																																																																											</span>
+																																																																																																																																																																																																																																																																																																										</a>
+																																																																																																																																																																																																																																																																																																									</li> #}
 
 
 						</ul>
@@ -290,4 +293,4 @@
 
 		<script src="{{asset('assets/js/app.js')}}"></script>
 	</body>
-</html></body></html>
+</html></body></html></body></html></body></html>

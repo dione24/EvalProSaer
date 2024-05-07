@@ -43,7 +43,7 @@ class ProjetController extends AbstractController
             $projets = $projetRepository->findAll();
         } else {
             // Sinon, récupérez les projets associés à l'utilisateur actuel
-            $projets = $projetRepository->findProjetByUser($this->getUser());
+            $projets = $projetRepository->findUserProject($this->getUser());
         }
 
         return $this->render('Admin/projet/index.html.twig', [
@@ -60,6 +60,7 @@ class ProjetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $projet->setCreatedAt(new \DateTimeImmutable());
+            $projet->setUser($this->getUser());
             $entityManager->persist($projet);
             $entityManager->flush();
             $this->addFlash('success', 'Projet ajouté avec succès');

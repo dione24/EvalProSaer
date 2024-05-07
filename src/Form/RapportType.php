@@ -35,9 +35,11 @@ class RapportType extends AbstractType
         if ($isConsultant) {
             $accessibleTaches = $this->entityManager->getRepository(Taches::class)->findTachesByUser($user);
             // Suppose que la méthode findProjetByUser() renvoie les projets accessibles pour le consultant
+            $accessibleProjets = $this->entityManager->getRepository(Projet::class)->findUserProject($user);
         } else {
             // Pour d'autres rôles comme manager ou admin, récupérez tous les projets
             $accessibleTaches = $this->entityManager->getRepository(Taches::class)->findAll();
+            $accessibleProjets = $this->entityManager->getRepository(Projet::class)->findAll();
         }
 
         $builder
@@ -61,15 +63,31 @@ class RapportType extends AbstractType
             ->add('perspectives', TextareaType::class, [
                 'label' => 'Perspectives',
             ]);
+
+        // $builder->add(
+        //     'projet',
+        //     EntityType::class,
+        //     [
+        //         'class' => Projet::class,
+        //         'choices' => $accessibleProjets,
+        //         'label' => 'Projet',
+        //         'choice_label' => function ($projet) {
+        //             return $projet->getNom();
+        //         },
+        //     ]
+        // );
+
+
+
         // Ajouter le champ projet_id avec les projets accessibles pour l'utilisateur
-        $builder->add('tache', EntityType::class, [
-            'class' => Taches::class,
-            'choices' => $accessibleTaches,
-            'label' => 'Tâche',
-            'choice_label' => function ($tache) {
-                return $tache->getDescription() . ' - ' . $tache->getProjet()->getNom();
-            },
-        ]);
+        // $builder->add('tache', EntityType::class, [
+        //     'class' => Taches::class,
+        //     'choices' => $accessibleTaches,
+        //     'label' => 'Tâche',
+        //     'choice_label' => function ($tache) {
+        //         return $tache->getDescription() . ' - ' . $tache->getProjet()->getNom();
+        //     },
+        // ]);
 
         // Si le rôle est consultant, le champ consultants ne sera pas multiple
         if (!$isConsultant) {

@@ -17,22 +17,24 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
+            ->add('username', TextType::class, ['label' => 'Nom d\'utilisateur'])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Admin' => 'ROLE_ADMIN',
                     'User' => 'ROLE_USER',
                     'Manager' => 'ROLE_MANAGER',
+                    'Consultant' => 'ROLE_CONSULTANT',
                     // Add more roles as needed
                 ],
                 'multiple' => true,
                 'expanded' => true, // Display checkboxes for multiple selection
             ])
-            ->add('nom', TextType::class)
-            ->add('prenom', TextType::class)
+            ->add('nom', TextType::class, ['label' => 'Nom'])
+            ->add('prenom', TextType::class, ['label' => 'Prénom'])
             ->add(
                 'email',
-                EmailType::class
+                EmailType::class,
+                ['label' => 'Adresse email']
             );
         // je conditionne mon formulaire selon si on edit ou pas
         if ($options["custom_option"] !== "edit") {

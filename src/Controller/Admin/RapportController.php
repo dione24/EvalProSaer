@@ -7,6 +7,7 @@ use App\Entity\Rapport;
 use App\Form\RapportType;
 
 use App\Entity\Consultant;
+use App\Entity\Projet;
 use App\Service\RapportService;
 use App\Repository\RapportRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +37,7 @@ class RapportController extends AbstractController
             $rapports = $rapportRepository->findAll();
         } else {
             // Sinon, récupérez les rapports associés à l'utilisateur actuel
-            $rapports = $rapportRepository->findRapportByUser($this->getUser());
+            $rapports = $rapportRepository->findUserRapport($this->getUser());
         }
 
         return $this->render('Admin/rapport/index.html.twig', [
@@ -45,27 +46,28 @@ class RapportController extends AbstractController
     }
 
 
-    #[Route('/new', name: 'app_rapport_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
+    #[Route('/new/{id}', name: 'app_rapport_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, Security $security, Projet $projet): Response
     {
         $rapport = new Rapport();
         $form = $this->createForm(RapportType::class, $rapport);
         $form->handleRequest($request);
         if ($this->isGranted('CREATE', $rapport)) {
             $user = $security->getUser();
-            if ($user instanceof User && $user->getConsultant() instanceof Consultant) {
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $rapport->setUser($user);
-                    $rapport->setCreatedAt(new \DateTimeImmutable());
-                    $entityManager->persist($rapport);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Rapport ajouté avec succès');
+            // if ($user instanceof User && $user->getConsultant() instanceof Consultant) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $rapport->setUser($user);
+                $rapport->setProjet($projet);
+                $rapport->setCreatedAt(new \DateTimeImmutable());
+                $entityManager->persist($rapport);
+                $entityManager->flush();
+                $this->addFlash('success', 'Rapport ajouté avec succès');
 
-                    return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
-                }
-            } else {
-                return $this->redirectToRoute('app_admin_dashboard');
+                return $this->redirectToRoute('app_rapport_index', [], Response::HTTP_SEE_OTHER);
             }
+            // } else {
+            //     return $this->redirectToRoute('app_admin_dashboard');
+            // }
         } else {
 
             return $this->redirectToRoute('app_admin_dashboard');

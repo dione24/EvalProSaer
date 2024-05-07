@@ -32,13 +32,15 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					{% if is_granted('ROLE_MANAGER') or is_granted('ROLE_ADMIN') %}
+					{% if is_granted('ROLE_ADMIN') %}
+
 
 						<a href="{{ path('app_projet_new') }}" class="btn btn-primary waves-effect waves-light mb-3">
 							<i class="mdi mdi-plus me-2"></i>
 							Ajouter un Projet
 						</a>
 					{% endif %}
+
 
 					<table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
 
@@ -49,11 +51,10 @@
 								<th>Nom</th>
 								<th>Client</th>
 								<th>Description</th>
-								<th>Budget</th>
+								{# <th>Budget</th> #}
 								<th>Date_debut</th>
 								<th>Date_fin</th>
 								<th>Statut</th>
-
 								<th>actions</th>
 							</tr>
 						</thead>
@@ -64,7 +65,8 @@
 									<td>{{ projet.nom }}</td>
 									<td>{{ projet.client }}</td>
 									<td>{{ projet.description }}</td>
-									<td>{{ projet.budget }}</td>
+									{# <td>{{ projet.budget }}</td> #}
+
 									<td>{{ projet.dateDebut ? projet.dateDebut|date('Y-m-d') : '' }}</td>
 									<td>{{ projet.dateFin ? projet.dateFin|date('Y-m-d') : '' }}</td>
 									<td>{{ projet.statut.nom ?? '' }}</td>
@@ -73,8 +75,12 @@
 											<a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="btn btn-primary waves-effect waves-light me-2">
 												<i class="mdi mdi-eye"></i>
 											</a>
-											{% if is_granted('ROLE_MANAGER') or is_granted('ROLE_ADMIN') %}
+											<a href="{{ path('app_rapport_new', {'id': projet.id}) }}" class="btn btn-secondary waves-effect waves-light me-2">
 
+												<i class="mdi mdi-pen"></i>
+											</a>
+
+											{% if is_granted('ROLE_MANAGER') or is_granted('ROLE_ADMIN') %}
 
 												<a href="{{ path('app_projet_edit', {'id': projet.id}) }}" class="btn btn-warning waves-effect waves-light me-2">
 													<i class="mdi mdi-pencil"></i>
