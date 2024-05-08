@@ -11,6 +11,7 @@ use App\Service\Comment;
 use App\Entity\Commentaires;
 use App\Service\UploadFiles;
 use App\Repository\ProjetRepository;
+use App\Repository\StatutRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +53,7 @@ class ProjetController extends AbstractController
     }
 
     #[Route('/new', name: 'app_projet_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, StatutRepository $statutRepository): Response
     {
         $projet = new Projet();
         $form = $this->createForm(ProjetType::class, $projet);
@@ -61,6 +62,8 @@ class ProjetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $projet->setCreatedAt(new \DateTimeImmutable());
             $projet->setUser($this->getUser());
+            $statut = $statutRepository->find(1); // Fetch the Statut entity
+            $projet->setStatut($statut); // Set the Statut entity
             $entityManager->persist($projet);
             $entityManager->flush();
             $this->addFlash('success', 'Projet ajouté avec succès');

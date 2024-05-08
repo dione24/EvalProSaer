@@ -58,17 +58,17 @@ class ProjetType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
-            ])
-            ->add('statut', EntityType::class, [
-                'class' => Statut::class,
-                'choice_label' => 'nom',
-                'label' => 'Statut',
-                'attr' => [
-                    'class' => 'form-control',
-                    'required' => true
-                ],
-
             ]);
+        // ->add('statut', EntityType::class, [
+        //     'class' => Statut::class,
+        //     'choice_label' => 'nom',
+        //     'label' => 'Statut',
+        //     'attr' => [
+        //         'class' => 'form-control',
+        //         'required' => true
+        //     ],
+
+        // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
