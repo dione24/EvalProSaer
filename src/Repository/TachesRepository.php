@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Taches;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Taches>
@@ -51,6 +52,29 @@ class TachesRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('t')
             ->innerJoin('t.consultants', 'c') // Joindre les consultants de la tâche
             ->where('c.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery();
+        return $qb->getResult();
+    }
+
+
+    //get all projet for user
+    public function findUserProject(User $user): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.user = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery();
+        return $qb->getResult();
+    }
+
+    // get all taches for user
+    // get all taches for user
+    public function findUserTaches(User $user): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->innerJoin('t.projet', 'p')
+            ->where('p.user = :userId')
             ->setParameter('userId', $user->getId())
             ->getQuery();
         return $qb->getResult();

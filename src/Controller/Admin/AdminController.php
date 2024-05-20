@@ -26,7 +26,7 @@ class AdminController extends AbstractController
             $projets = $projetRepository->findAll();
             $taches = $tachesRepository->findAll();
         } else {
-            $projets = $projetRepository->findProjetByUser($this->getUser());
+            $projets = $projetRepository->findUserProject($this->getUser());
             $taches = $tachesRepository->findTachesByUser($this->getUser());
         }
 

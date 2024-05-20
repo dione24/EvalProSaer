@@ -32,7 +32,7 @@ class TachesController extends AbstractController
             $taches = $tachesRepository->findAll();
         } else {
             // Sinon, récupérez les tâches associées à l'utilisateur actuel
-            $taches = $tachesRepository->findTachesByUser($this->getUser());
+            $taches = $tachesRepository->findUserTaches($this->getUser());
         }
         return $this->render('Admin/taches/index.html.twig', [
             'taches' => $taches,

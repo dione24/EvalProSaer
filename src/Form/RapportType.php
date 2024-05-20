@@ -50,18 +50,23 @@ class RapportType extends AbstractType
             ])
             ->add('resumeExecutif', TextareaType::class, [
                 'label' => 'Résumé exécutif',
+                'attr' => ['rows' => 5]
             ])
             ->add('pointsSaillants', TextareaType::class, [
                 'label' => 'Points saillants',
+                'attr' => ['rows' => 5]
             ])
             ->add('resultatsObtenus', TextareaType::class, [
                 'label' => 'Résultats obtenus',
+                'attr' => ['rows' => 5]
             ])
             ->add('appreciationEvolutionActivite', TextareaType::class, [
                 'label' => 'Appréciation de l\'évolution de l\'activité',
+                'attr' => ['rows' => 5]
             ])
             ->add('perspectives', TextareaType::class, [
                 'label' => 'Perspectives',
+                'attr' => ['rows' => 5]
             ]);
 
         // $builder->add(

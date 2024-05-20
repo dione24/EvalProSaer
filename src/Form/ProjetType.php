@@ -6,24 +6,27 @@ use App\Entity\User;
 use App\Entity\Projet;
 use App\Entity\Statut;
 use Doctrine\DBAL\Types\BigIntType;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ProjetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
         $builder
             ->add('nom', TextType::class, [
                 'label' => 'Nom du projet',
                 'required' => true, // champ obligatoire
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Nom du projet',
+                    'placeholder' => 'Exemple : Construction... '
                 ],
             ])
             ->add('client', TextType::class, [
@@ -31,11 +34,11 @@ class ProjetType extends AbstractType
                 'required' => true, // champ obligatoire
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Exemple : Construction... ',
+                    'placeholder' => 'Exemple : SAER GROUP'
 
                 ],
             ])
-            ->add('description', TextType::class, [
+            ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'required' => true, // champ obligatoire
                 'attr' => [
@@ -57,6 +60,8 @@ class ProjetType extends AbstractType
                 'required' => true, // champ obligatoire
                 'attr' => [
                     'class' => 'form-control',
+                    'value' => '2027-01-01',
+                    'readonly' => true
                 ],
             ]);
         // ->add('statut', EntityType::class, [
