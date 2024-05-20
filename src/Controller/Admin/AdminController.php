@@ -27,7 +27,7 @@ class AdminController extends AbstractController
             $taches = $tachesRepository->findAll();
         } else {
             $projets = $projetRepository->findUserProject($this->getUser());
-            $taches = $tachesRepository->findTachesByUser($this->getUser());
+            $taches = $tachesRepository->findUserTaches($this->getUser());
         }
 
         return $this->render('Admin/index.html.twig', [
