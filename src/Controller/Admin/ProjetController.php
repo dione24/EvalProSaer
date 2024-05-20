@@ -109,8 +109,23 @@ class ProjetController extends AbstractController
     public function delete(Request $request, Projet $projet, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $projet->getId(), $request->request->get('_token'))) {
+            // Retrieve and remove all related Commentaires entities before deleting the Projet
+            foreach ($projet->getCommentaires() as $commentaire) {
+                $entityManager->remove($commentaire);
+            }
+            // Retrieve and remove all related Fichiers entities before deleting the Projet
+            foreach ($projet->getFichiers() as $fichier) {
+                $entityManager->remove($fichier);
+            }
+            // Retrieve and remove all related Taches entities before deleting the Projet
+            foreach ($projet->getTaches() as $tache) {
+                $entityManager->remove($tache);
+            }
             $entityManager->remove($projet);
             $entityManager->flush();
+        } else {
+            $this->addFlash('error', 'Token de sécurité invalide, impossible de supprimer le projet.');
+            return $this->redirectToRoute('app_projet_index', [], Response::HTTP_SEE_OTHER);
         }
         $this->addFlash('success', 'Projet supprimé avec succès');
 
