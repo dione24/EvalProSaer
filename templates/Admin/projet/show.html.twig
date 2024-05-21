@@ -1,11 +1,13 @@
 {% extends 'layouts/app.html.twig' %}
-
 {% block body %}
 
 	<div class="row">
 		<div class="col-12">
 			<div class="page-title-box d-sm-flex align-items-center justify-content-between">
-				<h4 class="mb-sm-0 font-size-18">Projets
+				<h4 class="mb-sm-0 font-size-18">
+					Aperçu
+					{{ projet.nom }}
+
 				</h4>
 
 				<div class="page-title-right">
@@ -23,14 +25,13 @@
 	</div>
 	<!-- end page title -->
 
-
 	<div class="row">
 		<div class="col-lg-8">
 			<div class="card">
 				<div class="card-body">
 					<div class="d-flex">
 						<div class="flex-shrink-0 me-4">
-							<img src="{{asset('assets/images/saer.jpeg')}}" alt="" class="avatar-sm">
+							<img src="{{ asset('assets/images/saer.jpeg') }}" alt="" class="avatar-sm">
 						</div>
 
 						<div class="flex-grow-1 overflow-hidden">
@@ -42,19 +43,18 @@
 					</div>
 
 					<h5 class="font-size-15 mt-4">
-						Details du Projet :</h5>
+						Détails du Projet :</h5>
 
 					<p class="text-muted">
 						{{ projet.description }}
 					</p>
-
 
 					<div class="row task-dates">
 						<div class="col-sm-4 col-6">
 							<div class="mt-4">
 								<h5 class="font-size-14">
 									<i class="bx bx-calendar me-1 text-primary"></i>
-									Date de Debut</h5>
+									Date de Début</h5>
 								<p class="text-muted mb-0">{{ projet.dateDebut ? projet.dateDebut|date('Y-m-d') : '' }}</p>
 							</div>
 						</div>
@@ -72,191 +72,191 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="card">
 				{% for commentaire in projet.commentaires %}
-
 					<div class="comment-list">
 						<div class="p-3">
 							<div class="d-flex">
 								<div class="flex-grow-1">
-									<p class="font-size-14 mb-1"></p>
-									{{ commentaire.content }}
-								</p>
-								<p class="text-muted mb-0">
-									<i class="mdi mdi-clock-outline"></i>
-									{{ commentaire.createdAt|date('Y-m-d H:i:s') }}
-									|
-									{{ commentaire.user.username }}
-								</p>
-								<form action="{{ path('app_projet_comment_delete', {'id': commentaire.id}) }}" method="post">
-
-									<button type="submit" class="btn btn-danger btn-sm">
-										<i class="bx bx-trash"></i>
-									</button>
-								</form>
+									<p class="font-size-14 mb-1">
+										{{ commentaire.content }}
+									</p>
+									<p class="text-muted mb-0">
+										<i class="mdi mdi-clock-outline"></i>
+										{{ commentaire.createdAt|date('Y-m-d H:i:s') }}
+										|
+										{{ commentaire.user.username }}
+									</p>
+									<form action="{{ path('app_projet_comment_delete', {'id': commentaire.id}) }}" method="post">
+										<button type="submit" class="btn btn-danger btn-sm">
+											<i class="bx bx-trash"></i>
+										</button>
+									</form>
+								</div>
 							</div>
-						</div>
-					</div>
-					<hr>
-				</div>
-			{% endfor %}
-		</div>
-	</div>
-	<!-- end col -->
-	<div class="col-lg-4">
-		<div class="card">
-			<div class="card-body">
-				<h4 class="card-title mb-4">
-					Rapports
-					<div class="float-end">
-						<a href="{{ path('app_rapport_new', {'id': projet.id}) }}" class="btn btn-primary waves-effect waves-light">
-
-							<i class="bx bx-plus"></i>
-						</a>
-					</div>
-				</h4>
-
-				{% for rapport in projet.rapports %}
-					<div class="d-flex mb-4">
-						<div class="flex-grow-1">
-							<h5 class="font-size-13 mb-1">
-								{% set trimestre = (rapport.periode|date('n') + 2) / 3 %}
-								Trimestre
-								{{ trimestre|round(0, 'floor') }}
-								|
-								{{ rapport.createdAt|date('Y-m-d') }}
-							</h5>
-							<p class="text-muted mb-1">
-								{{ rapport.user.nom }}
-							</p>
-						</div>
-						<div class="ms-3">
-							<a href="{{ path('app_rapport_show', {'id': rapport.id}) }}" class="text-primary">
-								<i class="bx bx-show"></i>
-							</a>
 						</div>
 					</div>
 				{% endfor %}
 			</div>
 		</div>
 
-		<div class="card">
-			<div class="card-body">
-				<h4 class="card-title mb-4">
-					Commentaires
-					<button style="float: right;" type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">
-						<i class="bx bx-plus"></i>
 
-					</button>
-				</h4>
-			</div>
-		</div>
+		<!-- end col -->
+		<div class="col-lg-4">
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title mb-4">
+						Rapports
+						<div class="float-end">
+							<a href="{{ path('app_rapport_new', {'id': projet.id}) }}" class="btn btn-primary waves-effect waves-light">
 
-		<div class="card">
-			<div class="card-body">
-				<h4 class="card-title mb-4">
-					Pièces Jointes
-					<button style="float: right;" type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModalFiles">
-						<i class="bx bx-plus"></i>
+								<i class="bx bx-plus"></i>
+							</a>
+						</div>
+					</h4>
 
-					</button>
-				</h4>
-				<div class="table-responsive">
-					<table class="table table-nowrap align-middle table-hover mb-0">
-						<tbody>
-							{% for piece in projet.fichiers %}
-								<tr>
-									<td style="width: 45px;">
-										<div class="avatar-sm">
-											<span class="avatar-title rounded-circle bg-primary bg-soft text-primary font-size-24">
-												<i class="bx bxs-file-doc"></i>
-											</span>
-										</div>
-									</td>
-									<td>
-										<h5 class="font-size-14 mb-1">
-											<a href="javascript:void(0);" class="text-dark">
-												{{ piece.name }}
-											</a>
-										</h5>
-										<form action="{{ path('app_projet_files_delete', {'id': piece.id}) }}" method="post">
-											<button type="submit" class="btn btn-danger btn-sm">
-												<i class="bx bx-trash"></i>
-											</button>
-										</form>
-									</td>
-									<td>
-										<div class="text-center">
-											<a href="{{ path('download_file', {'fileName': piece.name}) }}" class="text-dark" download>
-												<i class="bx bx-download h3 m-0"></i>
-											</a>
-										</div>
-									</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+					{% for rapport in projet.rapports %}
+						<div class="d-flex mb-4">
+							<div class="flex-grow-1">
+								<h5 class="font-size-13 mb-1">
+									{% set trimestre = (rapport.periode|date('n') + 2) / 3 %}
+									Trimestre
+									{{ trimestre|round(0, 'floor') }}
+									|
+									{{ rapport.createdAt|date('Y-m-d') }}
+								</h5>
+								<p class="text-muted mb-1">
+									{{ rapport.user.nom }}
+								</p>
+							</div>
+							<div class="ms-3">
+								<a href="{{ path('app_rapport_show', {'id': rapport.id}) }}" class="text-primary">
+									<i class="bx bx-show"></i>
+								</a>
+							</div>
+						</div>
+					{% endfor %}
 				</div>
 			</div>
-		</div>
-	</div>
-	<div id="myModal" class="modal top" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<form action="{{ path('app_projet_comment_create', {'id': projet.id}) }}" method="post">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="myModalLabel">Ajouter un commentaire</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
 
-						<div class="mb-3">
-							<textarea class="form-control" id="content" name="content" rows="3"></textarea>
-						</div>
-						<input type="hidden" name="projet" value="{{ projet.id }}">
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
-						<button type="submit" class="btn btn-primary waves-effect waves-light">
-							Eneregistrer
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title mb-4">
+						Commentaires
+						<button style="float: right;" type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">
+							<i class="bx bx-plus"></i>
+
 						</button>
-					</div>
-
+					</h4>
 				</div>
-			</form>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal-dialog -->
-	</div>
-	<div id="myModalFiles" class="modal fade" tabindex="-1" aria-labelledby="myModalLabelFiles" aria-hidden="true">
-		<div class="modal-dialog">
-			<form action="{{ path('app_projet_files_upload', {'id': projet.id}) }}" method="post" enctype="multipart/form-data">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="myModalLabelFiles">
-							Ajouter un fichier
-						</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
+			</div>
 
-						<div class="mb-3">
-							<input type="file" class="form-control" id="content" name="file">
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title mb-4">
+						Pièces Jointes
+						<button style="float: right;" type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModalFiles">
+							<i class="bx bx-plus"></i>
 
-						</div>
-						<input type="hidden" name="projet" value="{{ projet.id }}">
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
-						<button type="submit" class="btn btn-primary waves-effect waves-light">
-							Eneregistrer
 						</button>
+					</h4>
+					<div class="table-responsive">
+						<table class="table table-nowrap align-middle table-hover mb-0">
+							<tbody>
+								{% for piece in projet.fichiers %}
+									<tr>
+										<td style="width: 45px;">
+											<div class="avatar-sm">
+												<span class="avatar-title rounded-circle bg-primary bg-soft text-primary font-size-24">
+													<i class="bx bxs-file-doc"></i>
+												</span>
+											</div>
+										</td>
+										<td>
+											<h5 class="font-size-14 mb-1">
+												<a href="javascript:void(0);" class="text-dark">
+													{{ piece.name }}
+												</a>
+											</h5>
+											<form action="{{ path('app_projet_files_delete', {'id': piece.id}) }}" method="post">
+												<button type="submit" class="btn btn-danger btn-sm">
+													<i class="bx bx-trash"></i>
+												</button>
+											</form>
+										</td>
+										<td>
+											<div class="text-center">
+												<a href="{{ path('download_file', {'fileName': piece.name}) }}" class="text-dark" download>
+													<i class="bx bx-download h3 m-0"></i>
+												</a>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
 					</div>
-
 				</div>
-			</form>
-			<!-- /.modal-content -->
+			</div>
 		</div>
-		<!-- /.modal-dialog -->
-	</div>
-{% endblock %}
+		<div id="myModal" class="modal top" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<form action="{{ path('app_projet_comment_create', {'id': projet.id}) }}" method="post">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="myModalLabel">Ajouter un commentaire</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+
+							<div class="mb-3">
+								<textarea class="form-control" id="content" name="content" rows="3"></textarea>
+							</div>
+							<input type="hidden" name="projet" value="{{ projet.id }}">
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
+							<button type="submit" class="btn btn-primary waves-effect waves-light">
+								Eneregistrer
+							</button>
+						</div>
+
+					</div>
+				</form>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div id="myModalFiles" class="modal fade" tabindex="-1" aria-labelledby="myModalLabelFiles" aria-hidden="true">
+			<div class="modal-dialog">
+				<form action="{{ path('app_projet_files_upload', {'id': projet.id}) }}" method="post" enctype="multipart/form-data">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="myModalLabelFiles">
+								Ajouter un fichier
+							</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+
+							<div class="mb-3">
+								<input type="file" class="form-control" id="content" name="file">
+
+							</div>
+							<input type="hidden" name="projet" value="{{ projet.id }}">
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
+							<button type="submit" class="btn btn-primary waves-effect waves-light">
+								Eneregistrer
+							</button>
+						</div>
+
+					</div>
+				</form>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+	{% endblock %}
