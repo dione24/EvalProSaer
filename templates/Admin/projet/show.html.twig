@@ -79,15 +79,22 @@
 						<div class="p-3">
 							<div class="d-flex">
 								<div class="flex-grow-1">
-									<p class="font-size-14 mb-1">
-										{{ commentaire.content }}
-									</p>
-									<p class="text-muted mb-0">
-										<i class="mdi mdi-clock-outline"></i>
-										{{ commentaire.createdAt|date('Y-m-d H:i:s') }}
-										|
-										{{ commentaire.user.username }}
-									</p>
+									<blockquote class="blockquote mb-0">
+										<p class="font-size-14 mb-1">
+											{{ commentaire.content }}
+										</p>
+										<br>
+										<footer class="blockquote-footer text-muted mb-0">
+											<i class="mdi mdi-clock-outline"></i>
+											{{ commentaire.createdAt|date('Y-m-d H:i:s') }}
+											|
+											{{ commentaire.user.username }}
+										</footer>
+									</blockquote>
+								</div>
+								<div
+									class="text-end">
+									<!-- Nouveau div ajouté pour aligner le bouton à droite -->
 									<form action="{{ path('app_projet_comment_delete', {'id': commentaire.id}) }}" method="post">
 										<button type="submit" class="btn btn-danger btn-sm">
 											<i class="bx bx-trash"></i>
@@ -99,6 +106,8 @@
 					</div>
 				{% endfor %}
 			</div>
+
+
 		</div>
 
 
