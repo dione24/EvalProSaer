@@ -209,63 +209,67 @@
 				</div>
 			</div>
 		</div>
-		<div id="myModal" class="modal top" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<form action="{{ path('app_projet_comment_create', {'id': projet.id}) }}" method="post">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="myModalLabel">Ajouter un commentaire</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
+		<!-- end row -->
+	</div>
+	<!-- end container-fluid -->
+</div>
 
-							<div class="mb-3">
-								<textarea class="form-control" id="content" name="content" rows="3"></textarea>
-							</div>
-							<input type="hidden" name="projet" value="{{ projet.id }}">
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
-							<button type="submit" class="btn btn-primary waves-effect waves-light">
-								Eneregistrer
-							</button>
-						</div>
+<div id="myModal" class="modal top" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<form action="{{ path('app_projet_comment_create', {'id': projet.id}) }}" method="post">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabel">Ajouter un commentaire</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+
+					<div class="mb-3">
+						<textarea class="form-control" id="content" name="content" rows="3"></textarea>
+					</div>
+					<input type="hidden" name="projet" value="{{ projet.id }}">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
+					<button type="submit" class="btn btn-primary waves-effect waves-light">
+						Eneregistrer
+					</button>
+				</div>
+
+			</div>
+		</form>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<div id="myModalFiles" class="modal fade" tabindex="-1" aria-labelledby="myModalLabelFiles" aria-hidden="true">
+	<div class="modal-dialog">
+		<form action="{{ path('app_projet_files_upload', {'id': projet.id}) }}" method="post" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabelFiles">
+						Ajouter un fichier
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+
+					<div class="mb-3">
+						<input type="file" class="form-control" id="content" name="file">
 
 					</div>
-				</form>
-				<!-- /.modal-content -->
+					<input type="hidden" name="projet" value="{{ projet.id }}">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
+					<button type="submit" class="btn btn-primary waves-effect waves-light">
+						Eneregistrer
+					</button>
+				</div>
+
 			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<div id="myModalFiles" class="modal fade" tabindex="-1" aria-labelledby="myModalLabelFiles" aria-hidden="true">
-			<div class="modal-dialog">
-				<form action="{{ path('app_projet_files_upload', {'id': projet.id}) }}" method="post" enctype="multipart/form-data">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="myModalLabelFiles">
-								Ajouter un fichier
-							</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-
-							<div class="mb-3">
-								<input type="file" class="form-control" id="content" name="file">
-
-							</div>
-							<input type="hidden" name="projet" value="{{ projet.id }}">
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Fermer</button>
-							<button type="submit" class="btn btn-primary waves-effect waves-light">
-								Eneregistrer
-							</button>
-						</div>
-
-					</div>
-				</form>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-	{% endblock %}
+		</form>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>{% endblock %}
