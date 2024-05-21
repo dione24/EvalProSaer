@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\User;
 use App\Entity\Rapport;
 use App\Form\RapportType;
 
