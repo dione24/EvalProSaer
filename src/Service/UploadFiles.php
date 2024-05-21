@@ -24,9 +24,9 @@ class UploadFiles
             throw new \InvalidArgumentException("No file uploaded.");
         }
 
-        // Verify file size (maximum 5 MB)
-        if ($file->getSize() > 5 * 1024 * 1024) { // 5 MB in bytes
-            throw new \InvalidArgumentException("File size exceeds the maximum limit of 5 MB.");
+        // Verify file size (maximum  20 MB
+        if ($file->getSize() > 20 * 1024 * 1024) { // 20 MB
+            throw new \InvalidArgumentException("File size exceeds the maximum limit of 20 MB.");
         }
 
         // Verify file extension (allow only PDF, Word, Excel)
