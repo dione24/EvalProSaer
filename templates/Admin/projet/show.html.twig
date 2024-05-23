@@ -45,7 +45,7 @@
 					<h5 class="font-size-15 mt-4">
 						Détails du Projet :</h5>
 
-					<p class="text-muted">
+					<p class="text-justify">
 						{{ projet.description }}
 					</p>
 
@@ -58,7 +58,6 @@
 								<p class="text-muted mb-0">{{ projet.dateDebut ? projet.dateDebut|date('Y-m-d') : '' }}</p>
 							</div>
 						</div>
-
 						<div class="col-sm-4 col-6">
 							<div class="mt-4">
 								<h5 class="font-size-14">
@@ -112,11 +111,13 @@
 
 		<!-- end col -->
 		<div class="col-lg-4">
-	<div class="card">
+			<div class="card">
 				<div class="card-body">
 					<div class="flex">
 						<button type="button" id="requestAIButton" class="btn btn-outline-primary" data-id="{{ projet.id }}">
-							<i class="fas fa-robot"> AI Analysis (Beta) </i>
+							<i class="fas fa-robot">
+								AI Analysis (Beta)
+							</i>
 						</button>
 						<button type="button" id="copyButton" class="btn btn-outline-warning">
 							<i class="fas fa-copy"></i>
