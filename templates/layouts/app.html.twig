@@ -295,6 +295,49 @@
 
 		<script src="{{asset('assets/js/app.js')}}"></script>
 
+<script>
+    document.getElementById('requestAIButton').addEventListener('click', function() {
+        const button = this;
+        const projectId = button.getAttribute('data-id');
+        const responseDiv = document.getElementById('response');
+        const spinner = document.getElementById('spinner');
+
+        // Afficher le spinner et masquer la réponse
+        spinner.style.display = 'block';
+        responseDiv.style.display = 'none';
+
+        // Préparation de la requête POST
+        fetch('/rapport/ai/rapport', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ projectId: projectId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Masquer le spinner
+            spinner.style.display = 'none';
+
+            if (data.response) {
+                // Afficher la réponse
+                responseDiv.style.display = 'block';
+                responseDiv.textContent = data.response;
+            } else {
+                // Afficher une erreur
+                responseDiv.style.display = 'block';
+                responseDiv.textContent = 'Erreur: ' + (data.error || 'Unknown error');
+            }
+        })
+        .catch(error => {
+            // Masquer le spinner et afficher l'erreur de réseau
+            spinner.style.display = 'none';
+            responseDiv.style.display = 'block';
+            responseDiv.textContent = 'Erreur de réseau: ' + error.message;
+        });
+    });
+</script>
+
 
 	</body>
 </html>

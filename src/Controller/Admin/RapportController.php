@@ -10,6 +10,7 @@ use App\Entity\Rapport;
 use App\Form\RapportType;
 use App\Entity\Consultant;
 use App\Service\RapportService;
+use App\Repository\ProjetRepository;
 use App\Repository\RapportRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -24,11 +25,14 @@ class RapportController extends AbstractController
 {
     private $security;
     private $rapportService;
+    private $projetRepository;
 
-    public function __construct(Security $security, RapportService $rapportService)
+
+    public function __construct(Security $security, RapportService $rapportService, ProjetRepository $projetRepository)
     {
         $this->security = $security;
         $this->rapportService = $rapportService;
+        $this->projetRepository = $projetRepository;
     }
 
     #[Route('/', name: 'app_rapport_index', methods: ['GET'])]
@@ -133,6 +137,7 @@ class RapportController extends AbstractController
     }
 
 
+
     #[Route('/ai/rapport', name: 'rapport', methods: ['POST'])]
     public function reponse(Request $request): Response
     {
@@ -143,12 +148,25 @@ class RapportController extends AbstractController
 
         $client = OpenAI::client($yourApiKey);
 
-        // Assurez-vous que comments est bien un tableau
-        /** @var array|null $comments */
-        $comments = $request->request->get('comments');
+        $content = json_decode($request->getContent(), true);
+        $projectId = $content['projectId'] ?? null;
+        if (!$projectId) {
+            return new JsonResponse(['error' => 'Project ID not provided'], Response::HTTP_BAD_REQUEST);
+        }
 
-        if (!is_array($comments)) {
-            return new JsonResponse(['error' => 'No comments provided or invalid format'], Response::HTTP_BAD_REQUEST);
+        // Récupérer le projet et ses commentaires
+        $projet = $this->projetRepository->find($projectId);
+        if (!$projet) {
+            return new JsonResponse(['error' => 'Project not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $comments = [];
+        foreach ($projet->getCommentaires() as $commentaire) {
+            $comments[] = $commentaire->getContent();
+        }
+
+        if (empty($comments)) {
+            return new JsonResponse(['error' => 'No comments found for this project'], Response::HTTP_BAD_REQUEST);
         }
 
         $prompt = "Fais un résumé des commentaires suivants : \n\n" . implode("\n\n", $comments);
