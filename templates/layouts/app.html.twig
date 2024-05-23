@@ -307,13 +307,13 @@
         responseDiv.style.display = 'none';
 
         // Préparation de la requête POST
-        fetch('/rapport/ai/rapport', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ projectId: projectId })
-        })
+			fetch('/rapport/ai/groq', { // Mettez à jour l'URL ici
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ projectId: projectId })
+			})
         .then(response => response.json())
         .then(data => {
             // Masquer le spinner
