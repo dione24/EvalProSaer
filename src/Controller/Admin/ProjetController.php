@@ -81,8 +81,25 @@ class ProjetController extends AbstractController
     public function show(Projet $projet): Response
     {
 
+        $data = array();
+        $commentaires = $projet->getCommentaires();
+        foreach ($commentaires as $commentaire) {
+            $data[] = array(
+                'Projet ' => $projet->getNom(),
+                'id' => $commentaire->getId(),
+                'content' => $commentaire->getContent(),
+                'createdAt' => $commentaire->getCreatedAt()->format('d/m/Y H:i:s'),
+                'user' => $commentaire->getUser()->getUsername()
+            );
+        }
+
+        $prompt = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+
         return $this->render('Admin/projet/show.html.twig', [
             'projet' => $projet,
+            'commentaires' => $commentaires,
+            'prompt' => $prompt,
         ]);
     }
 

@@ -110,9 +110,26 @@
 
 		</div>
 
-
 		<!-- end col -->
 		<div class="col-lg-4">
+
+			<div class="card">
+				<div class="card-body">
+					<div class="flex">
+						<button type="button" id="requestAIButton" class="btn btn-outline-primary">
+							<i class="fas fa-robot">
+								AI Analysis (Beta)
+							</i>
+						</button>
+						<button type="button" id="copyButton" class="btn btn-outline-warning">
+							<i class="fas fa-copy"></i>
+						</button>
+						<div id="response" class="border rounded p-3 my-3" style="display: none;"></div>
+					</div>
+				</div>
+			</div>
+
+
 			<div class="card">
 				<div class="card-body">
 					<h4 class="card-title mb-4">
@@ -124,7 +141,6 @@
 							</a>
 						</div>
 					</h4>
-
 					{% for rapport in projet.rapports %}
 						<div class="d-flex mb-4">
 							<div class="flex-grow-1">

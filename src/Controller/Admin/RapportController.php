@@ -2,11 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use OpenAI;
+use App\Entity\User;
+
+use App\Entity\Projet;
 use App\Entity\Rapport;
 use App\Form\RapportType;
-
 use App\Entity\Consultant;
-use App\Entity\Projet;
 use App\Service\RapportService;
 use App\Repository\RapportRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,6 +16,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/rapport')]
@@ -127,5 +130,38 @@ class RapportController extends AbstractController
         $this->rapportService->addEvaluation($rapport, $this->getUser(), $request->request->get('content'));
         $this->addFlash('success', 'Evaluation ajoutée avec succès');
         return $this->redirectToRoute('app_rapport_show', ['id' => $rapport->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/ai/rapport', name: 'rapport', methods: ['POST'])]
+    public function reponse(Request $request): Response
+    {
+        $yourApiKey = $_ENV['OPENAI_API_KEY'] ?? null;
+        if (!$yourApiKey) {
+            return new JsonResponse(['error' => 'API key not found'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $client = OpenAI::client($yourApiKey);
+
+        // Assurez-vous que comments est bien un tableau
+        /** @var array|null $comments */
+        $comments = $request->request->get('comments');
+
+        if (!is_array($comments)) {
+            return new JsonResponse(['error' => 'No comments provided or invalid format'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $prompt = "Fais un résumé des commentaires suivants : \n\n" . implode("\n\n", $comments);
+
+        $result = $client->chat()->create([
+            'model' => 'gpt-4',
+            'messages' => [
+                ['role' => 'user', 'content' => $prompt],
+            ],
+        ]);
+
+        $responseContent = $result->choices[0]->message->content;
+
+        return new JsonResponse(['response' => $responseContent]);
     }
 }
