@@ -51,7 +51,8 @@
 								<th>Id</th>
 								<th>Nom</th>
 								<th>Client</th>
-								<th>Description</th>
+{# <th>Description</th> #}
+
 								{# <th>Budget</th> #}
 								<th>Date_debut</th>
 								<th>Date_fin</th>
@@ -65,7 +66,7 @@
 									<td>{{ projet.id }}</td>
 									<td>{{ projet.nom }}</td>
 									<td>{{ projet.client }}</td>
-									<td>{{ projet.description }}</td>
+									{# <td>{{ projet.description }}</td> #}
 									{# <td>{{ projet.budget }}</td> #}
 
 									<td>{{ projet.dateDebut ? projet.dateDebut|date('Y-m-d') : '' }}</td>
